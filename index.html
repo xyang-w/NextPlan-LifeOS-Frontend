@@ -1,0 +1,431 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- NEXTPLAN_PHASE_B_V1 -->
+<!-- NEXTPLAN_PHASE_C_V1 -->
+<!-- NEXTPLAN_PHASE_D_V1 -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f5f5f7">
+<meta name="color-scheme" content="light dark">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./apple-web-v1.css?v=apple-web-v1">
+<title>NextPlan</title>
+<style>
+:root{
+  --bg:#f5f5f7;--glass:rgba(255,255,255,.72);--panel:#ffffff;--panel-soft:#fbfbfd;--text:#111318;--muted:#737b8c;
+  --border:rgba(15,23,42,.08);--hairline:rgba(15,23,42,.06);--shadow:0 12px 35px rgba(27,31,43,.07);
+  --blue:#3478f6;--blue2:#5b8cff;--green:#22b573;--purple:#8b5cf6;--pink:#ff4f91;--orange:#ff9f0a;--red:#ff453a;
+  --sidebar:rgba(247,249,252,.88);--rightbar:rgba(248,250,253,.82);--chip:#f1f3f7;--input:#eef1f5;
+}
+html[data-theme="dark"]{
+  --bg:#101216;--glass:rgba(26,29,35,.74);--panel:#1b1e24;--panel-soft:#20242b;--text:#f4f6f8;--muted:#9da5b4;
+  --border:rgba(255,255,255,.08);--hairline:rgba(255,255,255,.06);--shadow:0 16px 40px rgba(0,0,0,.24);
+  --sidebar:rgba(20,23,28,.9);--rightbar:rgba(20,23,28,.86);--chip:#292d35;--input:#272b33;
+}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:"Inter",-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue","Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+body{min-height:100vh;overflow-x:hidden}button,input,select{font:inherit}button{cursor:pointer}svg{display:block}
+.app-shell{min-height:100vh;display:grid;grid-template-columns:236px minmax(0,1fr) 292px;background:radial-gradient(circle at 36% -10%,rgba(76,139,245,.07),transparent 32%),radial-gradient(circle at 78% 0%,rgba(139,92,246,.05),transparent 25%),var(--bg)}
+.sidebar{position:sticky;top:0;height:100vh;padding:20px 14px 18px;background:var(--sidebar);backdrop-filter:blur(24px);border-right:1px solid var(--hairline);display:flex;flex-direction:column;z-index:20}
+.brand{display:flex;align-items:center;gap:11px;padding:4px 8px 18px}.brand-mark{width:42px;height:42px;border-radius:12px;box-shadow:0 7px 18px rgba(52,120,246,.22);overflow:hidden;flex:none}.brand h1{font-size:20px;letter-spacing:-.5px;margin:0;font-weight:700}.brand p{font-size:12px;color:var(--muted);margin:3px 0 0;line-height:1.3;font-weight:400;letter-spacing:-.01em}
+.nav-group{display:grid;gap:4px}.nav-label{font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);font-weight:600;padding:17px 11px 7px}.nav-btn{display:flex;align-items:center;gap:10px;border:0;background:transparent;color:var(--text);padding:9px 11px;border-radius:10px;font-size:16px;font-weight:400;line-height:1.25;letter-spacing:-.022em;text-align:left}.nav-btn svg{width:20px;height:20px;color:#667085;stroke-width:1.7}.nav-btn.active{background:linear-gradient(135deg,#3478f6,#4f85fa);color:#fff;box-shadow:0 7px 15px rgba(52,120,246,.18)}.nav-btn.active svg{color:#fff}.nav-btn:hover:not(.active){background:var(--chip)}
+.area-dot{width:24px;height:24px;border-radius:8px;display:grid;place-items:center;font-size:12px;font-weight:700}.a-research{background:#e9e0ff;color:#7448ef}.a-phd{background:#efe8ff;color:#7b55e8}.a-school{background:#dff1ff;color:#3484ce}.a-career{background:#dcf8ee;color:#119966}.a-admin{background:#fff0d9;color:#e28a12}.a-life{background:#ffe2ee;color:#e84986}
+.sidebar-footer{margin-top:auto}.settings-btn{width:100%;display:flex;gap:10px;align-items:center;border:0;background:transparent;color:var(--muted);padding:10px 11px;border-radius:10px;font-size:16px;font-weight:400;line-height:1.25;letter-spacing:-.022em}.settings-btn svg{width:20px;height:20px;stroke-width:1.7;color:#667085}.settings-btn:hover{background:var(--chip)}
+.main{min-width:0;padding:28px 28px 46px}.topbar{display:flex;gap:20px;align-items:flex-start;justify-content:space-between;margin-bottom:18px}.hello h2{font-size:30px;letter-spacing:-.8px;margin:0;font-weight:760}.hello p{margin:4px 0 0;color:var(--muted);font-size:14px}.top-actions{display:flex;align-items:center;gap:9px}.sync-pill{height:34px;border:1px solid var(--border);background:var(--glass);backdrop-filter:blur(18px);border-radius:999px;padding:0 10px;display:flex;align-items:center;gap:7px;color:var(--muted);font-size:11px;white-space:nowrap}.sync-pill .sync-dot{width:7px;height:7px;border-radius:50%;background:#aab2bf}.sync-pill.synced .sync-dot{background:var(--green)}.sync-pill.syncing .sync-dot{background:var(--orange)}.sync-pill.error .sync-dot{background:var(--red)}.search-btn{height:38px;width:min(245px,30vw);border:1px solid var(--border);background:var(--glass);backdrop-filter:blur(18px);color:var(--muted);border-radius:13px;padding:0 12px;display:flex;align-items:center;gap:8px;box-shadow:0 2px 10px rgba(0,0,0,.025)}.search-btn span:first-of-type{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.kbd{margin-left:auto;font-size:11px;border:1px solid var(--border);background:var(--panel);border-radius:6px;padding:1px 5px;color:var(--muted)}
+.card{background:var(--glass);backdrop-filter:blur(22px);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow)}.hero{padding:21px 22px}.hero-row{display:flex;justify-content:space-between;gap:18px;align-items:center}.eyebrow{font-size:13px;font-weight:650}.hero-pct{font-size:41px;font-weight:760;letter-spacing:-1.2px;line-height:1;margin-top:6px}.primary{border:0;color:white;background:linear-gradient(135deg,#3478f6,#4d86fa);border-radius:13px;padding:11px 16px;font-weight:650;box-shadow:0 8px 18px rgba(52,120,246,.22);display:flex;align-items:center;gap:9px}.primary:hover{filter:brightness(.99)}
+.progress-track{height:10px;border-radius:999px;background:#e9edf3;overflow:hidden;margin-top:14px}.progress-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,#3478f6,#5a8df7);transition:width .28s ease}html[data-theme="dark"] .progress-track{background:#2b3038}.hero-meta{font-size:12px;color:var(--muted);margin-top:9px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:14px 0 22px}.stat{padding:15px;display:flex;gap:12px;align-items:center}.stat-icon{width:43px;height:43px;border-radius:13px;display:grid;place-items:center;flex:none}.stat-icon svg{width:21px;height:21px}.si-blue{background:#e2efff;color:#3478f6}.si-green{background:#def8ef;color:#1aa26b}.si-purple{background:#eee4ff;color:#7b48ef}.si-pink{background:#ffe3ef;color:#ee4a87}.stat-num{font-size:24px;font-weight:750;line-height:1}.stat-title{font-size:12px;color:var(--muted);margin-top:4px}.stat-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.section-head{display:flex;justify-content:space-between;gap:16px;align-items:center;margin-bottom:10px}.section-head h3{font-size:20px;margin:0;letter-spacing:-.35px}.section-head p{font-size:12px;color:var(--muted);margin:3px 0 0}.link-btn{border:0;background:transparent;color:var(--muted);font-size:12px;display:flex;align-items:center;gap:5px;padding:6px 3px}.link-btn:hover{color:var(--text)}
+.project-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.project-card{padding:15px;min-width:0;transition:transform .16s ease,box-shadow .16s ease}.project-card:hover{transform:translateY(-1px);box-shadow:0 15px 38px rgba(24,29,40,.09)}.pc-top{display:flex;align-items:flex-start;gap:10px}.pc-icon{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;flex:none}.pc-icon svg{width:18px;height:18px}.pc-text{min-width:0;flex:1}.pc-title{font-size:14px;font-weight:690;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.pc-sub{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}.pc-pct{font-size:13px;font-weight:700;margin-left:auto}.mini-progress{height:6px;border-radius:999px;background:#ebeff4;overflow:hidden;margin-top:13px}.mini-progress span{display:block;height:100%;background:var(--blue);border-radius:999px}html[data-theme="dark"] .mini-progress{background:#2b3038}.pc-next{border-top:1px solid var(--hairline);margin-top:11px;padding-top:10px;font-size:11px;line-height:1.45;color:var(--muted);display:grid;grid-template-columns:18px 1fr;gap:5px}.pc-next b{color:var(--text);font-weight:630;display:block;margin-bottom:2px}.pc-next svg{width:14px;height:14px;margin-top:1px;color:#8993a3}.empty-project{cursor:pointer;width:100%;font:inherit;color:var(--muted);min-height:164px;border:1px dashed rgba(52,120,246,.22);border-radius:18px;display:grid;place-items:center;text-align:center;color:var(--muted);background:rgba(255,255,255,.28)}.empty-project .plus{font-size:30px;color:var(--blue);line-height:1}.empty-project b{display:block;color:var(--blue);font-size:13px;margin-top:4px}
+.view{display:none}.view.active{display:block}.view-title{margin-bottom:18px}.view-title h2{font-size:28px;margin:0;letter-spacing:-.6px}.view-title p{color:var(--muted);font-size:13px;margin:4px 0 0}.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}.select{appearance:none;-webkit-appearance:none;border:1px solid var(--border);background-color:var(--panel);color:var(--text);border-radius:12px;padding:9px 34px 9px 12px;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 16px) 50%,calc(100% - 11px) 50%;background-size:5px 5px;background-repeat:no-repeat}.list-card{padding:0;overflow:hidden}.list-row{padding:15px 17px;border-top:1px solid var(--hairline);display:flex;gap:14px;align-items:flex-start}.list-row:first-child{border-top:0}.status-dot{width:9px;height:9px;border-radius:50%;margin-top:6px;flex:none}.sd-active{background:var(--blue)}.sd-waiting{background:var(--orange)}.sd-planned{background:#aab2bf}.sd-completed,.sd-done{background:var(--green)}.sd-blocked{background:var(--red)}.list-main{min-width:0;flex:1}.list-title{font-weight:670}.list-sub{font-size:12px;color:var(--muted);margin-top:3px}.list-meta{font-size:12px;color:var(--muted);text-align:right}.milestone-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;line-height:1}.milestone-tags .priority{display:inline-flex;align-items:center;line-height:1.25;margin:0!important;padding:5px 8px;white-space:normal;vertical-align:middle}.task-grid{display:grid;gap:10px}.task-card{padding:15px 17px;display:grid;grid-template-columns:28px 1fr auto;gap:12px;align-items:start}.task-check{width:25px;height:25px;border-radius:8px;background:#e5efff;color:var(--blue);display:grid;place-items:center}.task-check svg{width:14px;height:14px}.task-title{font-weight:670}.task-desc{font-size:12px;color:var(--muted);margin-top:3px}.priority{font-size:11px;color:var(--muted);background:var(--chip);padding:4px 7px;border-radius:999px}
+.calendar-layout{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(250px,.6fr);gap:14px}.calendar-card{padding:18px}.cal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}.cal-title{font-size:17px;font-weight:700}.cal-nav{display:flex;gap:6px}.round-btn{width:31px;height:31px;border-radius:10px;border:1px solid var(--border);background:var(--panel);color:var(--text);display:grid;place-items:center}.weekdays,.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}.weekdays div{font-size:11px;color:var(--muted);text-align:center;padding:5px}.day{min-height:67px;border-radius:12px;padding:7px;font-size:12px;position:relative;border:1px solid transparent}.day.muted{color:#b6bdc8}.day.today{background:#edf4ff;border-color:#d8e8ff;color:#2f6fdc}html[data-theme="dark"] .day.today{background:#1e2c43;border-color:#28426b;color:#91b8ff}.day.has-event{background:var(--panel-soft)}.daynum{font-weight:620}.event-dots{display:flex;gap:3px;position:absolute;bottom:7px;left:7px}.event-dots span{width:5px;height:5px;border-radius:50%}.upcoming-list{display:grid;gap:8px}.upcoming-item{padding:12px;border-radius:13px;background:var(--panel-soft);display:grid;grid-template-columns:8px 1fr auto;gap:9px;align-items:center}.u-dot{width:8px;height:8px;border-radius:50%}.u-title{font-size:12px;font-weight:650}.u-date{font-size:11px;color:var(--muted);margin-top:1px}.u-right{font-size:11px;color:var(--muted)}.empty-state{padding:34px 20px;text-align:center;color:var(--muted)}.empty-state svg{width:36px;height:36px;margin:0 auto 8px;color:#a6aeba}.empty-state b{display:block;color:var(--text);font-size:14px;margin-bottom:4px}
+.notes-grid,.resources-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.note-card,.resource-card{padding:16px}.note-title,.resource-title{font-weight:690}.note-body,.resource-sub{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.5}.note-meta{font-size:11px;color:var(--muted);margin-top:11px}.resource-card{display:flex;gap:12px;align-items:flex-start}.resource-icon{width:38px;height:38px;border-radius:11px;background:#e5efff;color:var(--blue);display:grid;place-items:center;flex:none}.resource-icon svg{width:18px;height:18px}.analytics-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.analytics-card{padding:17px}.analytics-card h4{font-size:14px;margin:0 0 13px}.area-row{display:grid;grid-template-columns:92px 1fr 38px;gap:10px;align-items:center;margin:10px 0;font-size:12px}.area-track{height:7px;background:#e9edf3;border-radius:999px;overflow:hidden}.area-track span{height:100%;display:block;border-radius:999px;background:linear-gradient(90deg,#3478f6,#8b5cf6)}html[data-theme="dark"] .area-track{background:#2b3038}.metric-big{font-size:34px;font-weight:760;letter-spacing:-.8px}.metric-label{font-size:12px;color:var(--muted)}
+.rightbar{position:sticky;top:0;height:100vh;padding:22px 15px 18px;background:var(--rightbar);backdrop-filter:blur(24px);border-left:1px solid var(--hairline);overflow:auto}.profile-row{display:flex;justify-content:flex-end;margin-bottom:18px}.avatar{width:38px;height:38px;border:0;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#747f93,#9ca5b5);color:white;font-size:12px;font-weight:700}.today-date{font-size:14px;font-weight:650}.reflection{font-size:13px;color:var(--muted);font-style:italic;line-height:1.45;margin-top:7px}.side-card{background:var(--glass);border:1px solid var(--border);border-radius:17px;box-shadow:var(--shadow);padding:15px;margin-top:18px}.side-title{font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:space-between}.mini-cal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.mini-week,.mini-days{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;gap:2px}.mini-week div{font-size:10px;color:var(--muted);padding:3px}.mini-day{font-size:11px;padding:6px 0;border-radius:50%;position:relative}.mini-day.today{background:var(--blue);color:#fff}.mini-day.muted{color:#bbc2cc}.mini-day.has-event:not(.today)::after{content:"";width:4px;height:4px;background:var(--green);border-radius:50%;position:absolute;left:50%;transform:translateX(-50%);bottom:1px}.side-upcoming{margin-top:18px}.side-upcoming-list{display:grid;gap:0;margin-top:8px}.side-event{display:grid;grid-template-columns:8px 1fr auto;gap:9px;align-items:center;border-top:1px solid var(--hairline);padding:10px 0}.side-event:first-child{border-top:0}.side-event-title{font-size:12px;font-weight:650}.side-event-date,.side-event-right{font-size:10px;color:var(--muted)}.soft-quote{margin-top:18px;min-height:133px;border-radius:18px;padding:17px;background:linear-gradient(145deg,#eef3ff,#dfe9fa 58%,#cbdaf2);color:#27334d;position:relative;overflow:hidden}.soft-quote:before{content:"";position:absolute;width:170px;height:80px;background:rgba(104,136,191,.18);border-radius:50% 50% 0 0;right:-35px;bottom:-20px;transform:rotate(-8deg)}.soft-quote p{font-size:13px;line-height:1.45;font-weight:600;width:72%;margin:0;position:relative;z-index:1}
+.modal{border:0;border-radius:20px;background:var(--panel);color:var(--text);padding:0;width:min(650px,calc(100vw - 28px));box-shadow:0 28px 90px rgba(0,0,0,.28)}.modal::backdrop{background:rgba(20,23,30,.34);backdrop-filter:blur(4px)}.modal-inner{padding:20px}.modal-title{font-size:19px;font-weight:730;margin:0 0 4px}.modal-sub{font-size:12px;color:var(--muted);margin-bottom:15px}.field{display:grid;gap:5px;margin-top:10px}.field label{font-size:11px;color:var(--muted);font-weight:600}.field input{border:1px solid var(--border);background:var(--input);color:var(--text);padding:10px 11px;border-radius:10px;outline:none}.field input:focus{border-color:rgba(52,120,246,.55);box-shadow:0 0 0 3px rgba(52,120,246,.11)}.modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}.secondary{border:1px solid var(--border);background:var(--panel);color:var(--text);border-radius:11px;padding:9px 12px}.danger{color:var(--red)}
+.search-modal{width:min(720px,calc(100vw - 30px));align-self:start;margin-top:8vh}.search-input-wrap{display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--hairline);padding:15px 18px}.search-input-wrap input{border:0;outline:0;background:transparent;color:var(--text);font-size:17px;width:100%}.search-results{max-height:58vh;overflow:auto;padding:8px}.search-result{padding:11px 12px;border-radius:11px;display:flex;gap:10px;align-items:flex-start}.search-result:hover{background:var(--chip)}.search-kind{font-size:10px;background:var(--chip);color:var(--muted);border-radius:6px;padding:2px 5px;flex:none;margin-top:2px}.search-result b{font-size:13px}.search-result p{font-size:11px;color:var(--muted);margin:3px 0 0}
+.mobile-top{display:none}.scrim{display:none}
+@media(max-width:1180px){.app-shell{grid-template-columns:210px minmax(0,1fr)}.rightbar{display:none}.project-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.stats{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:820px){.app-shell{display:block}.sidebar{position:fixed;left:0;transform:translateX(-102%);width:250px;transition:transform .22s ease;box-shadow:20px 0 50px rgba(0,0,0,.12)}.sidebar.open{transform:translateX(0)}.scrim{position:fixed;inset:0;background:rgba(10,13,18,.25);z-index:15}.scrim.show{display:block}.main{padding:17px 15px 35px}.mobile-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}.mobile-brand{font-weight:730}.icon-button{border:0;background:var(--panel);color:var(--text);border-radius:10px;width:37px;height:37px;display:grid;place-items:center;box-shadow:var(--shadow)}.topbar{align-items:center}.hello h2{font-size:25px}.sync-pill{display:none}.search-btn{width:42px;padding:0;justify-content:center}.search-btn span,.search-btn .kbd{display:none}.project-grid,.notes-grid,.resources-grid,.analytics-grid,.calendar-layout{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}.hero-row{align-items:flex-start;flex-direction:column}.primary{width:100%;justify-content:center}.project-card{min-height:auto}}
+@media(max-width:480px){.stats{grid-template-columns:1fr}.hello p{font-size:12px}.hello h2{font-size:23px}}
+
+
+
+
+
+/* APPROVED SIDEBAR SPEC v4 START */
+/* Final user-approved sidebar tuning: compact Apple-like proportions, 236px desktop width. */
+.sidebar{
+  width:236px;
+  padding:18px 14px 14px;
+  background:#fafbfc;
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Inter","Helvetica Neue",Arial,sans-serif;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  scrollbar-width:none;
+}
+.sidebar::-webkit-scrollbar{display:none}
+html[data-theme="dark"] .sidebar{background:#0b1220}
+.brand{
+  gap:12px;
+  padding:0 6px 16px;
+  align-items:center;
+}
+.brand-mark{
+  width:48px;
+  height:48px;
+  border-radius:14px;
+  box-shadow:0 8px 20px rgba(67,97,238,.20);
+  flex:0 0 48px;
+}
+.brand-mark img{width:48px;height:48px}
+.brand h1{
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Inter","Helvetica Neue",Arial,sans-serif;
+  font-size:20px;
+  line-height:24px;
+  font-weight:700;
+  letter-spacing:-.45px;
+  color:#0f172a;
+  white-space:nowrap;
+}
+.brand p{
+  margin:2px 0 0;
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Inter","Helvetica Neue",Arial,sans-serif;
+  font-size:12px;
+  line-height:16px;
+  font-weight:400;
+  letter-spacing:-.08px;
+  color:#64748b;
+  white-space:nowrap;
+}
+html[data-theme="dark"] .brand h1{color:#f8fafc}
+html[data-theme="dark"] .brand p{color:#94a3b8}
+.nav-group{gap:2px}
+.nav-btn{
+  min-height:40px;
+  padding:8px 12px;
+  gap:10px;
+  border-radius:12px;
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Inter","Helvetica Neue",Arial,sans-serif;
+  font-size:15px;
+  line-height:20px;
+  font-weight:400;
+  letter-spacing:-.16px;
+  color:#0f172a;
+}
+.nav-btn > svg{
+  width:18px;
+  height:18px;
+  flex:0 0 18px;
+  color:#64748b;
+  stroke-width:1.75;
+}
+.nav-btn[data-view="resources"] > svg{
+  width:15px;
+  height:15px;
+  flex:0 0 15px;
+  margin-left:1.5px;
+  margin-right:1.5px;
+  stroke-width:1.8;
+}
+.nav-btn.active{
+  min-height:40px;
+  color:#fff;
+  font-weight:500;
+  background:linear-gradient(135deg,#3b82f6 0%,#2563eb 100%);
+  box-shadow:0 7px 16px rgba(37,99,235,.20);
+}
+.nav-btn.active > svg{color:#fff}
+.nav-btn:hover:not(.active){background:#f1f5f9}
+html[data-theme="dark"] .nav-btn{color:#f8fafc}
+html[data-theme="dark"] .nav-btn > svg{color:#94a3b8}
+html[data-theme="dark"] .nav-btn.active{background:#1e3a8a;color:#fff}
+html[data-theme="dark"] .nav-btn.active > svg{color:#fff}
+html[data-theme="dark"] .nav-btn:hover:not(.active){background:#111c2d}
+.nav-label{
+  margin:10px 0 0;
+  padding:16px 12px 7px;
+  border-top:1px solid #e2e8f0;
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Inter","Helvetica Neue",Arial,sans-serif;
+  font-size:11px;
+  line-height:14px;
+  font-weight:600;
+  letter-spacing:.10em;
+  color:#64748b;
+}
+html[data-theme="dark"] .nav-label{border-top-color:#233044;color:#94a3b8}
+.area-dot{
+  width:26px;
+  height:26px;
+  border-radius:8px;
+  flex:0 0 26px;
+  font-size:12px;
+  line-height:26px;
+  font-weight:600;
+}
+.sidebar-footer{
+  margin-top:auto;
+  padding-top:12px;
+  border-top:1px solid #e2e8f0;
+}
+html[data-theme="dark"] .sidebar-footer{border-top-color:#233044}
+.settings-btn{
+  min-height:40px;
+  padding:8px 12px;
+  gap:10px;
+  border-radius:12px;
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Inter","Helvetica Neue",Arial,sans-serif;
+  font-size:15px;
+  line-height:20px;
+  font-weight:400;
+  letter-spacing:-.16px;
+  color:#64748b;
+}
+.settings-btn svg{
+  width:18px;
+  height:18px;
+  flex:0 0 18px;
+  color:#64748b;
+  stroke-width:1.75;
+}
+.settings-btn:hover{background:#f1f5f9}
+html[data-theme="dark"] .settings-btn{color:#cbd5e1}
+html[data-theme="dark"] .settings-btn svg{color:#cbd5e1}
+html[data-theme="dark"] .settings-btn:hover{background:#111c2d}
+@media(min-width:1181px){.app-shell{grid-template-columns:236px minmax(0,1fr) 292px}}
+/* APPROVED SIDEBAR SPEC v4 END */
+
+
+/* NEXTPLAN PHASE C */
+.review-list{display:grid;gap:8px;margin-top:8px}.review-item{padding:9px 10px;border-radius:11px;background:var(--panel-soft);font-size:12px;line-height:1.45}.review-item b{display:block;color:var(--text);font-size:12px;margin-bottom:2px}.review-muted{color:var(--muted)}.knowledge-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.knowledge-chip{font-size:10px;border-radius:999px;background:var(--chip);color:var(--muted);padding:3px 7px}.resource-link{color:var(--blue);text-decoration:none;word-break:break-all}.resource-link:hover{text-decoration:underline}.search-result[data-palette-view]{cursor:pointer}.search-result[data-palette-view]:hover{background:var(--panel-soft)}.search-command{color:var(--blue);font-weight:700}.search-help{font-size:11px;color:var(--muted);padding:8px 4px 4px}
+
+
+/* NEXTPLAN PHASE D */
+.sev-critical{color:var(--red)}.sev-high{color:var(--orange)}.sev-medium{color:var(--blue)}.sev-normal{color:var(--green)}.rule-off{opacity:.58}.plan-score{font-size:20px;font-weight:760;letter-spacing:-.4px}.automation-summary{font-size:11px;color:var(--muted);margin-top:4px}
+
+
+/* NEXTPLAN APPLE LAYOUT FIX v2 */
+.hero:before{display:none!important}
+#view-projects .list-card{
+  display:block!important;
+  padding:0!important;
+  overflow:hidden!important;
+  background:var(--apple-panel)!important;
+  border:1px solid var(--apple-border)!important;
+  border-radius:19px!important;
+  box-shadow:var(--apple-shadow)!important;
+  backdrop-filter:blur(26px) saturate(145%)!important;
+  -webkit-backdrop-filter:blur(26px) saturate(145%)!important;
+}
+#view-projects .list-row{
+  position:static!important;
+  min-height:0!important;
+  padding:15px 17px!important;
+  border:0!important;
+  border-top:1px solid rgba(91,104,122,.08)!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  display:flex!important;
+  gap:14px!important;
+  align-items:flex-start!important;
+  align-content:normal!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+#view-projects .list-row:first-child{border-top:0!important}
+#view-projects .list-meta{margin-left:auto!important;text-align:right!important}
+.task-check{align-self:center!important}
+
+
+/* NEXTPLAN ICON FIX v1 */
+.settings-btn svg{width:20px!important;height:20px!important;flex:0 0 20px!important;stroke-width:1.9!important}
+.empty-resource-icon{width:28px!important;height:28px!important;color:#96a2b3!important;margin:0 auto 10px!important}
+
+
+/* NEXTPLAN MINI CALENDAR NAV FIX v1 */
+.mini-cal-head{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:12px!important;
+  margin-bottom:14px!important;
+}
+.mini-cal-head>.row{
+  display:inline-flex!important;
+  align-items:center!important;
+  flex-wrap:nowrap!important;
+  gap:0!important;
+  overflow:hidden!important;
+  border:1px solid rgba(105,117,135,.11)!important;
+  border-radius:11px!important;
+  background:rgba(255,255,255,.58)!important;
+  box-shadow:0 3px 12px rgba(54,65,82,.045)!important;
+}
+.mini-cal-head .round-btn{
+  width:32px!important;
+  height:30px!important;
+  min-width:32px!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  color:#596579!important;
+  font-size:19px!important;
+  line-height:1!important;
+  display:grid!important;
+  place-items:center!important;
+}
+.mini-cal-head .round-btn+.round-btn{
+  border-left:1px solid rgba(105,117,135,.11)!important;
+}
+.mini-cal-head .round-btn:hover{
+  background:rgba(75,143,247,.08)!important;
+  color:var(--apple-blue)!important;
+}
+.mini-cal-head .side-title{
+  font-size:15px!important;
+  font-weight:700!important;
+  letter-spacing:-.2px!important;
+}
+html[data-theme="dark"] .mini-cal-head>.row{
+  background:rgba(45,51,62,.72)!important;
+  border-color:rgba(255,255,255,.10)!important;
+}
+html[data-theme="dark"] .mini-cal-head .round-btn+.round-btn{
+  border-left-color:rgba(255,255,255,.10)!important;
+}
+
+
+/* NEXTPLAN RIGHT RAIL AVATAR REMOVAL v1 */
+.rightbar .profile-row{display:none!important;margin:0!important;padding:0!important}
+
+</style>
+</head>
+<body>
+<div class="scrim" id="scrim"></div>
+<div class="app-shell">
+<aside class="sidebar" id="sidebar">
+  <div class="brand"><div class="brand-mark"><img src="./icon.svg" alt="" width="48" height="48"></div><div><h1>NextPlan</h1><p>Plan today.<br>A brighter tomorrow.</p></div></div>
+  <nav class="nav-group" aria-label="Primary navigation">
+    <button class="nav-btn active" data-view="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 10.5 12 3l9 7.5V21h-6v-6H9v6H3z"/></svg>Home</button>
+    <button class="nav-btn" data-view="projects"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h6l2 2h10v11H3z"/><path d="M3 8V5h6l2 3"/></svg>Projects</button>
+    <button class="nav-btn" data-view="tasks"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m5 12 3 3 6-7"/><path d="M14 5h5v14H5v-5"/></svg>Tasks</button>
+    <button class="nav-btn" data-view="calendar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 10h18"/></svg>Calendar</button>
+    <button class="nav-btn" data-view="review"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5h16v14H4z"/><path d="M8 9h8M8 13h5M8 17h7"/></svg>Weekly Review</button>
+    <button class="nav-btn" data-view="planner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 18 9 13l4 3 7-9"/><path d="M17 7h3v3"/></svg>AI Planning</button>
+    <button class="nav-btn" data-view="automation"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v3m0 12v3M3 12h3m12 0h3"/><circle cx="12" cy="12" r="5"/></svg>Automation</button>
+    <button class="nav-btn" data-view="notes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 3h14v18H5z"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>Notes</button>
+    <button class="nav-btn" data-view="resources"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.07.07l2-2A5 5 0 0 0 12 4l-1.15 1.15"/><path d="M14 11a5 5 0 0 0-7.07-.07l-2 2A5 5 0 0 0 12 20l1.15-1.15"/></svg>Resources</button>
+    <button class="nav-btn" data-view="analytics"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20V10m5 10V4m5 16v-7m5 7V7"/></svg>Analytics</button>
+  </nav>
+  <div class="nav-label">Areas</div>
+  <div class="nav-group">
+    <button class="nav-btn area-filter" data-area="科研"><span class="area-dot a-research">R</span>Research</button>
+    <button class="nav-btn area-filter" data-area="PhD"><span class="area-dot a-phd">P</span>PhD Application</button>
+    <button class="nav-btn area-filter" data-area="学校"><span class="area-dot a-school">S</span>School</button>
+    <button class="nav-btn area-filter" data-area="课程"><span class="area-dot a-career">C</span>Coursework</button>
+    <button class="nav-btn area-filter" data-area="行政"><span class="area-dot a-admin">A</span>Life & Admin</button>
+  </div>
+  <div class="sidebar-footer"><button class="settings-btn" id="settingsNav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.75v2.1m0 14.3v2.1M2.75 12h2.1m14.3 0h2.1M5.45 5.45l1.48 1.48m10.14 10.14 1.48 1.48M18.55 5.45l-1.48 1.48M6.93 17.07l-1.48 1.48"/><circle cx="12" cy="12" r="3.75"/></svg>Settings</button></div>
+</aside>
+<main class="main">
+  <div class="mobile-top"><button class="icon-button" id="menuBtn" aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="19" height="19"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button><div class="mobile-brand">NextPlan</div><button class="icon-button mobile-search" aria-label="Search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="18" height="18"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg></button></div>
+  <header class="topbar"><div class="hello"><h2 id="greeting">Good evening.</h2><p>Your personal progress dashboard · Keep going, step by step.</p></div><div class="top-actions"><div class="sync-pill" id="syncPill"><span class="sync-dot"></span><span id="syncText">Local</span></div><button class="search-btn" id="searchBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="17" height="17"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><span>Search...</span><span class="kbd">⌘ K</span></button></div></header>
+  <section class="view active" id="view-home">
+    <div class="card hero"><div class="hero-row"><div><div class="eyebrow">Overall Progress</div><div class="hero-pct" id="overallPct">0%</div></div><button class="primary" id="nextActionBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="17" height="17"><path d="m12 3 1.2 4.1L17 9l-3.8 1.8L12 15l-1.2-4.2L7 9l3.8-1.9z"/><path d="m18.5 14 .7 2.3 2.3.7-2.3.7-.7 2.3-.7-2.3-2.3-.7 2.3-.7z"/></svg>What should I do now?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="m9 5 7 7-7 7"/></svg></button></div><div class="progress-track"><div class="progress-fill" id="overallBar"></div></div><div class="hero-meta" id="overallMeta">Loading current state…</div></div>
+    <div class="stats"><div class="card stat"><div class="stat-icon si-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V2h6v2m-7 7 2 2 4-4"/></svg></div><div><div class="stat-num" id="statTotal">0</div><div class="stat-title">Total Projects</div><div class="stat-sub" id="statActive">0 active</div></div></div><div class="card stat"><div class="stat-icon si-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="m10 8 6 4-6 4z" fill="currentColor" stroke="none"/></svg></div><div><div class="stat-num" id="statProgress">0</div><div class="stat-title">In Progress</div><div class="stat-sub">Actionable now</div></div></div><div class="card stat"><div class="stat-icon si-purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 21V4m0 1h11l-2 4 2 4H5"/></svg></div><div><div class="stat-num" id="statWaiting">0</div><div class="stat-title">Waiting</div><div class="stat-sub">No action required</div></div></div><div class="card stat"><div class="stat-icon si-pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v6m0 4h.01"/></svg></div><div><div class="stat-num" id="statDeadlines">0</div><div class="stat-title">Upcoming Deadlines</div><div class="stat-sub">Confirmed dates only</div></div></div></div>
+    <div class="section-head"><div><h3>Projects</h3><p>All your major projects at a glance, with progress and current actions.</p></div><button class="link-btn" data-go="projects">View All <span>→</span></button></div><div class="project-grid" id="homeProjects"></div>
+  </section>
+  <section class="view" id="view-projects"><div class="view-title"><h2>Projects</h2><p>Long-term goals, status, milestones, and current actions.</p></div><div class="toolbar"><select class="select" id="projectAreaFilter"><option value="全部">All Areas</option><option value="科研">Research</option><option value="PhD">PhD</option><option value="学校">School</option><option value="课程">Coursework</option><option value="行政">Life & Admin</option></select><select class="select" id="projectStatusFilter"><option value="全部">All Statuses</option><option value="active">In Progress</option><option value="waiting">Waiting</option><option value="planned">Planned</option><option value="blocked">Blocked</option><option value="done">Completed</option></select></div><div class="list-card card" id="projectList"></div></section>
+  <section class="view" id="view-tasks"><div class="view-title"><h2>Tasks</h2><p>Only shows actions you can move forward now. Waiting items stay out of your attention.</p></div><div class="task-grid" id="taskList"></div></section>
+  <section class="view" id="view-calendar"><div class="view-title"><h2>Calendar</h2><p>Only confirmed dates are shown, so the calendar never creates false urgency.</p></div><div class="calendar-layout"><div class="card calendar-card"><div class="cal-head"><div class="cal-title" id="calTitle"></div><div class="cal-nav"><button class="round-btn" id="calPrev" aria-label="Previous month">‹</button><button class="round-btn" id="calNext" aria-label="Next month">›</button></div></div><div class="weekdays"><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div><div>Sun</div></div><div class="cal-grid" id="calGrid"></div></div><div class="card calendar-card"><div class="section-head"><div><h3 style="font-size:16px">Upcoming</h3><p>Confirmed deadlines</p></div></div><div class="upcoming-list" id="calendarUpcoming"></div></div></div></section>
+  <section class="view" id="view-review"><div class="view-title"><h2>Weekly Review</h2><p>Review movement, stalled work, waiting items, and time pressure across the past 7 days and next 14 days.</p></div><div class="analytics-grid" id="reviewMetrics"><div class="card analytics-card"><h4>Movement</h4><div class="metric-big" id="reviewEvents7">0</div><div class="metric-label">state changes in the last 7 days</div></div><div class="card analytics-card"><h4>Completions</h4><div class="metric-big" id="reviewCompletions">0</div><div class="metric-label">confirmed completion events</div></div><div class="card analytics-card"><h4>Waiting / Blocked</h4><div class="metric-big" id="reviewWaiting">0</div><div class="metric-label">projects requiring review, not immediate execution</div></div><div class="card analytics-card"><h4>Next 14 Days</h4><div class="metric-big" id="reviewUpcoming">0</div><div class="metric-label">confirmed calendar items and deadlines</div></div></div><div style="height:14px"></div><div class="analytics-grid"><div class="card analytics-card"><h4>Attention</h4><div id="reviewAttention" class="review-list"></div></div><div class="card analytics-card"><h4>Completed This Week</h4><div id="reviewCompleted" class="review-list"></div></div><div class="card analytics-card"><h4>Upcoming</h4><div id="reviewSchedule" class="review-list"></div></div><div class="card analytics-card"><h4>Review Prompt</h4><div id="reviewPrompt" class="review-list"></div></div></div></section>
+  <section class="view" id="view-planner"><div class="view-title"><h2>AI Planning</h2><p>Builds explainable plans from confirmed NextPlan state. Recommendations never rewrite project facts automatically.</p></div><div class="analytics-grid"><div class="card analytics-card"><h4>Focus Now</h4><div id="plannerFocus" class="review-list"></div></div><div class="card analytics-card"><h4>Capacity</h4><div id="plannerCapacity" class="review-list"></div></div><div class="card analytics-card"><h4>Next 14 Days</h4><div id="plannerHorizon" class="review-list"></div></div><div class="card analytics-card"><h4>Planning Interventions</h4><div id="plannerInterventions" class="review-list"></div></div></div></section>
+  <section class="view" id="view-automation"><div class="view-title"><h2>Automation</h2><p>Checks overdue items, preparation windows, stalled work, waiting follow-ups, and structural issues. By default, it recommends rather than rewrites.</p></div><div class="analytics-grid"><div class="card analytics-card"><h4>Rules</h4><div id="automationRules" class="review-list"></div></div><div class="card analytics-card"><h4>Latest Findings</h4><div id="automationFindings" class="review-list"></div></div><div class="card analytics-card"><h4>Last Run</h4><div id="automationMeta" class="review-list"></div></div><div class="card analytics-card"><h4>Safety</h4><div class="review-list"><div class="review-item"><b>Observe / recommend first</b><span class="review-muted">Automation may surface findings, but completion, deletion, new commitments and priority changes still require the normal confirmation protocol.</span></div></div></div></div></section>
+  <section class="view" id="view-notes"><div class="view-title"><h2>Notes</h2><p>Idea ≠ Task. Keep useful conversation ideas here before they become executable work.</p></div><div class="notes-grid" id="notesGrid"></div></section>
+  <section class="view" id="view-resources"><div class="view-title"><h2>Resources</h2><p>An index of important materials and entry points without copying sensitive file contents into NextPlan.</p></div><div class="resources-grid" id="resourcesGrid"></div></section>
+  <section class="view" id="view-analytics"><div class="view-title"><h2>Analytics</h2><p>Not a KPI board. It answers whether the system is moving forward and where control is starting to slip.</p></div><div class="analytics-grid"><div class="card analytics-card"><h4>Progress by Area</h4><div id="areaProgress"></div></div><div class="card analytics-card"><h4>Movement</h4><div class="metric-big" id="events7">0</div><div class="metric-label">state changes · 7 days</div><div style="height:14px"></div><div class="metric-big" id="events30">0</div><div class="metric-label">state changes · 30 days</div><div style="height:14px"></div><div class="metric-big" id="completion30">0</div><div class="metric-label">completion events · 30 days</div></div><div class="card analytics-card"><h4>Execution Health</h4><div class="metric-big" id="nextActionCoverage">0%</div><div class="metric-label">active projects with a next action</div><div style="height:14px"></div><div class="metric-big" id="waitingCountAnalytics">0</div><div class="metric-label">waiting projects</div></div><div class="card analytics-card"><h4>Milestones</h4><div class="metric-big" id="milestoneDone">0</div><div class="metric-label" id="milestoneLabel">completed milestones</div></div><div class="card analytics-card"><h4>Time Pressure</h4><div class="metric-big" id="overdueCount">0</div><div class="metric-label">overdue deadlines</div><div style="height:14px"></div><div class="metric-big" id="upcoming14Count">0</div><div class="metric-label">items in the next 14 days</div></div><div class="card analytics-card"><h4>Knowledge Base</h4><div class="metric-big" id="knowledgeCount">0</div><div class="metric-label" id="knowledgeLabel">notes + resources</div></div><div class="card analytics-card"><h4>Stale Active Work</h4><div id="analyticsStale" class="review-list"></div></div><div class="card analytics-card"><h4>System</h4><div class="list-sub" id="analyticsUpdated">Last updated: —</div><div class="list-sub" style="margin-top:8px">Conversation-controlled central state</div><div class="list-sub" style="margin-top:8px">Waiting / blocked items excluded from Next Action</div></div></div></section>
+</main>
+<aside class="rightbar"><div class="today-date" id="sideDate">—</div><div class="reflection">“Small, clear steps are enough for today.”</div><div class="side-card"><div class="mini-cal-head"><div class="side-title" id="miniMonth">—</div><div class="row"><button class="round-btn" id="miniPrev">‹</button><button class="round-btn" id="miniNext">›</button></div></div><div class="mini-week"><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div><div>Sun</div></div><div class="mini-days" id="miniDays"></div></div><div class="side-upcoming"><div class="side-title">Upcoming <button class="link-btn" data-go="calendar">View All →</button></div><div class="side-upcoming-list" id="sideUpcoming"></div></div><div class="soft-quote"><p id="softMessage">A little progress every day adds up.</p></div></aside>
+</div>
+<dialog class="modal" id="settingsDialog"><form method="dialog" id="settingsForm"><div class="modal-inner"><div class="modal-title">NextPlan Settings</div><div class="modal-sub">Your read token stays on this device. UI updates will not remove it.</div><div class="field"><label>Repository</label><input id="repoInput" value="changxinjiresearch/LifeOS"></div><div class="field"><label>Branch</label><input id="branchInput" value="main"></div><div class="field"><label>State file</label><input id="pathInput" value="state.json"></div><div class="field"><label>Fine-grained PAT</label><input id="tokenInput" type="password" autocomplete="off" placeholder="github_pat_..."></div><div class="modal-actions"><button class="secondary danger" type="button" id="clearTokenBtn">Clear Token</button><span style="flex:1"></span><button class="secondary" type="button" id="themeBtn">Toggle Appearance</button><button class="secondary" type="button" id="cancelSettings">Cancel</button><button class="primary" value="save">Save & Sync</button></div></div></form></dialog>
+<dialog class="modal search-modal" id="searchDialog"><div class="search-input-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="20" height="20"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input id="searchInput" placeholder="Search everything or type > command…" autocomplete="off"><button class="secondary" id="closeSearch">Esc</button></div><div class="search-results" id="searchResults"></div></dialog>
+<dialog class="modal" id="nextDialog"><div class="modal-inner"><div class="modal-title">Do this now</div><div class="modal-sub">NextPlan recommends one current action based on priority, timing, preparation windows, and executability.</div><div id="nextDialogBody"></div><div class="modal-actions"><button class="secondary" id="pickAlternative">Pick something else</button><span style="flex:1"></span><button class="primary" id="closeNext">Got it</button></div></div></dialog>
+<script>
+(()=>{
+const CACHE='clo-v3-cache', CFG='clo-v3-cfg', THEME='clo-v3-theme';
+const EMPTY={schema_version:2,system:{name:'NextPlan',last_updated:null},projects:[],events:[],notes:[],resources:[],deadlines:[],calendar_events:[]};
+let state=loadCache(),busy=false,syncTimer=null,currentView='home',calendarCursor=new Date(),miniCursor=new Date(),lastPickKey=null;
+const $=id=>document.getElementById(id);
+const icons={research:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 3h10v18H7z"/><path d="M9 7h6M9 11h6M9 15h4"/></svg>`,phd:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m3 10 9-5 9 5-9 5z"/><path d="M7 13v4c3 2 7 2 10 0v-4"/></svg>`,school:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20h16M6 20V9h12v11M9 20v-5h6v5M3 9l9-6 9 6"/></svg>`,admin:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 21V8l8-5 8 5v13z"/><path d="M9 21v-6h6v6"/></svg>`};
+function loadCache(){try{const x=JSON.parse(localStorage.getItem(CACHE));if(x&&Array.isArray(x.projects))return x}catch(e){}return structuredClone(EMPTY)}function saveCache(){localStorage.setItem(CACHE,JSON.stringify(state))}function getCfg(){try{return JSON.parse(localStorage.getItem(CFG))||{}}catch(e){return {}}}function saveCfg(c){localStorage.setItem(CFG,JSON.stringify(c))}function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function statusLabel(s){return ({active:'In Progress',waiting:'Waiting',planned:'Planned',completed:'Completed',done:'Completed',blocked:'Blocked'})[s]||s}function priorityLabel(n){return n===3?'High Priority':n===2?'Medium Priority':'Low Priority'}function categoryLabel(c){return ({'科研':'Research','PhD':'PhD','学校':'School','课程':'Coursework','行政':'Life & Admin','其他':'Other'})[c]||c}function projectPct(p){const ms=p.milestones||[];if(!ms.length)return p.status==='done'?100:0;return Math.round(ms.filter(m=>m.status==='completed').length/ms.length*100)}function overallPct(){const ps=(state.projects||[]).filter(p=>p.status!=='planned');if(!ps.length)return 0;const w=ps.reduce((s,p)=>s+(p.priority||1),0);return Math.round(ps.reduce((s,p)=>s+projectPct(p)*(p.priority||1),0)/w)}
+function colorForCategory(c){return c==='科研'?['#e5efff','#3478f6']:c==='PhD'?['#f1e8ff','#7b48ef']:c==='学校'?['#e6f5ff','#3484ce']:c==='课程'?['#e6f8ef','#1aa26b']:['#fff0dc','#e28a12']}function iconForCategory(c){return c==='科研'?icons.research:c==='PhD'?icons.phd:c==='学校'?icons.school:c==='课程'?icons.school:icons.admin}function statusClass(s){return 'sd-'+(s==='completed'?'completed':s)}
+function currentActionInfo(p){const ms=p.milestones||[],active=ms.filter(m=>m.status==='active'),planned=ms.filter(m=>m.status==='planned');if(p.status==='waiting')return{label:'Waiting',text:p.next_action||'Waiting for external input'};if(p.status==='blocked')return{label:'Blocked',text:p.next_action||'Waiting for the blocker to be resolved'};if(p.status==='completed'||p.status==='done')return{label:'Completed',text:'Project completed'};if(p.status==='planned')return{label:'Planned',text:p.next_action||planned[0]?.name||'Waiting to start'};if(active.length)return{label:'Current Action',text:active.map(m=>m.name).join(' · ')};return{label:'Current Action',text:p.next_action||planned[0]?.name||'No current action set'}}
+function parseLocalDate(raw){if(!raw)return null;const m=String(raw).match(/^(\d{4})-(\d{2})-(\d{2})$/);if(m)return new Date(Number(m[1]),Number(m[2])-1,Number(m[3]));const d=new Date(raw);return Number.isNaN(d.getTime())?null:d}
+function confirmedDeadlines(){const out=[];const add=(raw,base={})=>{const date=parseLocalDate(raw);if(!date)return;out.push({...base,date,raw})};(state.deadlines||[]).forEach(d=>{if(['event','meeting','appointment','presentation','reminder'].includes(String(d.kind||'')))return;add(d.date||d.due,{id:d.id,title:d.title||d.name||'Deadline',category:d.category||'',project_id:d.project_id,task_id:d.task_id,time:d.time||'',timezone:d.timezone||'',kind:'deadline',prep_days:d.prep_days})});(state.projects||[]).forEach(p=>{add(p.deadline||p.due,{id:'project-due-'+p.id,title:p.name,category:p.category,project_id:p.id,kind:'deadline',prep_days:p.prep_days});(p.milestones||[]).forEach(m=>add(m.deadline||m.due,{id:'task-due-'+p.id+'-'+m.id,title:m.name,category:p.category,project_id:p.id,task_id:m.id,kind:'deadline',prep_days:m.prep_days}))});const seen=new Set();return out.filter(x=>{const k=(x.id||'')+'|'+x.title+'|'+localISO(x.date);if(seen.has(k))return false;seen.add(k);return true}).sort((a,b)=>a.date-b.date||String(a.time||'').localeCompare(String(b.time||'')))}
+function calendarEntries(){const out=confirmedDeadlines().map(x=>({...x,type:'deadline'}));const addEvent=e=>{const date=parseLocalDate(e.date||e.due);if(!date)return;out.push({id:e.id,title:e.title||e.name||'Event',date,time:e.time||'',timezone:e.timezone||'',kind:e.kind||'event',type:'calendar_event',category:e.category||'',project_id:e.project_id,task_id:e.task_id,prep_days:e.prep_days})};(state.calendar_events||[]).forEach(addEvent);(state.deadlines||[]).filter(d=>['event','meeting','appointment','presentation','reminder'].includes(String(d.kind||''))).forEach(addEvent);const seen=new Set();return out.filter(x=>{const k=(x.id||'')+'|'+x.title+'|'+localISO(x.date)+'|'+(x.time||'');if(seen.has(k))return false;seen.add(k);return true}).sort((a,b)=>a.date-b.date||String(a.time||'').localeCompare(String(b.time||'')))}
+function renderGreeting(){const h=new Date().getHours();$('greeting').textContent=(h<12?'Good morning.':h<18?'Good afternoon.':'Good evening.')}function formatUpdated(s){if(!s)return '—';const d=new Date(s);return Number.isNaN(d)?s:d.toLocaleString([], {month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})}
+function renderHome(){const ps=state.projects||[],ov=overallPct(),active=ps.filter(p=>p.status==='active').length,waiting=ps.filter(p=>p.status==='waiting').length,dl=confirmedDeadlines().filter(x=>x.date>=startOfToday()&&x.date<=new Date(Date.now()+30*86400000));$('overallPct').textContent=ov+'%';$('overallBar').style.width=ov+'%';$('overallMeta').textContent=`${ps.filter(p=>projectPct(p)===100).length} / ${ps.length} projects completed  ·  ${active} in progress  ·  Last updated: ${formatUpdated(state.system?.last_updated)}`;$('statTotal').textContent=ps.length;$('statActive').textContent=active+' active';$('statProgress').textContent=active;$('statWaiting').textContent=waiting;$('statDeadlines').textContent=dl.length;$('homeProjects').innerHTML=ps.map(projectCard).join('')}
+function projectCard(p){const pc=projectPct(p),[bg,fg]=colorForCategory(p.category),action=currentActionInfo(p);return `<article class="card project-card"><div class="pc-top"><div class="pc-icon" style="background:${bg};color:${fg}">${iconForCategory(p.category)}</div><div class="pc-text"><div class="pc-title">${esc(p.name)}</div><div class="pc-sub">${esc(categoryLabel(p.category))} · ${priorityLabel(p.priority)} · ${statusLabel(p.status)}</div></div><div class="pc-pct">${pc}%</div></div><div class="mini-progress"><span style="width:${pc}%"></span></div><div class="pc-next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="4" width="14" height="16" rx="2"/><path d="M8 2v4m8-4v4M8 10h8"/></svg><div><b>${esc(action.label)}</b>${esc(action.text)}</div></div></article>`}
+function renderProjects(){const area=$('projectAreaFilter').value,status=$('projectStatusFilter').value;const ps=(state.projects||[]).filter(p=>(area==='全部'||p.category===area)&&(status==='全部'||p.status===status));$('projectList').innerHTML=ps.length?ps.map(p=>{const action=currentActionInfo(p);return `<div class="list-row"><span class="status-dot ${statusClass(p.status)}"></span><div class="list-main"><div class="list-title">${esc(p.name)}</div><div class="list-sub"><b style="color:var(--text);font-weight:630">${esc(action.label)}: </b>${esc(action.text)}</div><div class="milestone-tags">${(p.milestones||[]).map(m=>`<span class="priority">${statusLabel(m.status)} · ${esc(m.name)}</span>`).join('')}</div></div><div class="list-meta"><b style="color:var(--text);font-size:16px">${projectPct(p)}%</b><br>${esc(categoryLabel(p.category))} · ${priorityLabel(p.priority)}</div></div>`}).join(''):`<div class="empty-state"><b>No projects match these filters</b>Try a different filter.</div>`}
+function deadlineUrgency(days){if(days==null)return 0;if(days<=0)return 55;if(days===1)return 50;if(days===2)return 44;if(days===3)return 36;if(days<=7)return Math.max(12,30-(days-4)*4.5);if(days<=14)return Math.max(2,10-(days-8)*1.2);return 0}
+function preparationBonus(days,prep){if(days==null||prep<=0||days<0||days>prep)return 0;return 10+16*((prep-days)/Math.max(1,prep))}
+function activityBonuses(raw){if(!raw)return{continuity:0,neglect:0};const d=new Date(raw);if(Number.isNaN(d.getTime()))return{continuity:0,neglect:0};const age=Math.max(0,(Date.now()-d.getTime())/86400000);return{continuity:age<=1?8:age<=3?4:0,neglect:age<7?0:Math.min(12,2+(age-7)*.8)}}
+function decisionSchedule(p,m){const list=[];confirmedDeadlines().forEach(d=>{if(m&&d.task_id&&String(d.task_id)===String(m.id))list.push(d);else if(d.project_id&&String(d.project_id)===String(p.id))list.push(d)});(state.calendar_events||[]).forEach(e=>{if(String(e.project_id||'')!==String(p.id)||!['presentation','meeting'].includes(String(e.kind||'')))return;const date=parseLocalDate(e.date);if(date)list.push({...e,date,type:'calendar_event'})});return list.sort((a,b)=>a.date-b.date)}
+function decisionCandidates(){const out=[];(state.projects||[]).filter(p=>p.status==='active').forEach(p=>{const active=(p.milestones||[]).filter(m=>m.status==='active');const work=active.length?active:(p.next_action?[null]:[]);work.forEach(m=>{const pr=Math.max(1,Math.min(3,Number(p.priority)||1)),priority={1:20,2:35,3:50}[pr],sched=decisionSchedule(p,m),nearest=sched[0]||null,days=nearest?daysDiff(nearest.date):null,urgency=deadlineUrgency(days);let prep=m?.prep_days??p.prep_days??nearest?.prep_days;if(prep==null)prep=nearest?.kind==='presentation'?5:nearest?.type==='calendar_event'?1:3;prep=Math.max(0,Number(prep)||0);const preparation=preparationBonus(days,prep),ab=activityBonuses(m?.last_worked_at||p.last_worked_at),score=priority+urgency+preparation+ab.continuity+ab.neglect,reasons=[(pr===3?'High':pr===2?'Medium':'Low')+' priority'];if(days!=null){reasons.push(days<=0?'deadline is due or overdue':`deadline in ${days} day${days===1?'':'s'}`);if(preparation>0)reasons.push('preparation window active')}if(ab.continuity>0)reasons.push('continuity bonus');if(ab.neglect>0)reasons.push('long-term item has been neglected');out.push({key:p.id+'::'+(m?.id||'project'),project:p,name:m?.name||p.next_action||p.name,desc:p.next_action||'',priority:p.priority,score,deadlineDays:days,why:reasons.join(' · ')})})});return out.sort((a,b)=>b.score-a.score||String(a.project.name).localeCompare(String(b.project.name)))}
+function chooseDecision(excludeKey=null){const pool=decisionCandidates().filter(x=>x.key!==excludeKey);if(!pool.length)return null;const top=pool[0],second=pool[1],det=(top.deadlineDays!=null&&top.deadlineDays<=2)||!second||top.score-second.score>=15;if(det)return{...top,mode:'deterministic',poolCount:pool.length};const near=pool.filter(x=>top.score-x.score<=12).slice(0,5),weights=near.map(x=>Math.exp((x.score-top.score)/6)),sum=weights.reduce((a,b)=>a+b,0);let r=Math.random()*sum;for(let i=0;i<near.length;i++){r-=weights[i];if(r<=0)return{...near[i],mode:'weighted-near-top',poolCount:pool.length}}return{...top,mode:'weighted-near-top',poolCount:pool.length}}
+function actionableTasks(){return decisionCandidates()}
+function renderTasks(){const ts=actionableTasks();$('taskList').innerHTML=ts.length?ts.map(t=>`<div class="card task-card"><div class="task-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m7 12 3 3 7-7"/></svg></div><div><div class="task-title">${esc(t.name)}</div><div class="task-desc">${esc(t.project.name)} · ${esc(t.desc)}</div></div><div class="priority">${priorityLabel(t.priority)}</div></div>`).join(''):`<div class="card empty-state"><b>No actionable tasks right now</b>If everything else is Waiting, you can stop for today.</div>`}
+function startOfToday(){const d=new Date();d.setHours(0,0,0,0);return d}function daysDiff(d){return Math.ceil((new Date(d.getFullYear(),d.getMonth(),d.getDate())-startOfToday())/86400000)}function deadlineColor(c){return c==='科研'?varColor('green'):c==='PhD'?varColor('purple'):c==='学校'?varColor('blue'):varColor('orange')}function varColor(name){return getComputedStyle(document.documentElement).getPropertyValue('--'+name).trim()||'#3478f6'}
+function renderCalendar(cursor,gridId,titleId,mini=false){const y=cursor.getFullYear(),m=cursor.getMonth();if(titleId)$(titleId).textContent=new Intl.DateTimeFormat('en-AU',{month:'long',year:'numeric'}).format(cursor);const first=new Date(y,m,1),offset=(first.getDay()+6)%7,days=new Date(y,m+1,0).getDate(),prevDays=new Date(y,m,0).getDate(),entries=calendarEntries();let html='';for(let i=0;i<42;i++){let n,dm=m,dy=y,muted=false;if(i<offset){n=prevDays-offset+i+1;dm=m-1;muted=true}else if(i>=offset+days){n=i-(offset+days)+1;dm=m+1;muted=true}else n=i-offset+1;const date=new Date(dy,dm,n),iso=localISO(date),events=entries.filter(d=>localISO(d.date)===iso),today=localISO(new Date())===iso,title=events.map(e=>(e.time?e.time+' ':'')+e.title).join(', ');if(mini)html+=`<div class="mini-day ${muted?'muted ':''}${today?'today ':''}${events.length?'has-event':''}" title="${esc(title)}">${n}</div>`;else html+=`<div class="day ${muted?'muted ':''}${today?'today ':''}${events.length?'has-event':''}"><div class="daynum">${n}</div>${events.length?`<div style="font-size:9px;color:var(--muted);margin-top:5px;line-height:1.2">${esc((events[0].time?events[0].time+' ':'')+events[0].title)}</div><div class="event-dots">${events.slice(0,3).map(e=>`<span style="background:${deadlineColor(e.category)}"></span>`).join('')}</div>`:''}</div>`}$(gridId).innerHTML=html}
+function localISO(d){const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),day=String(d.getDate()).padStart(2,'0');return `${y}-${m}-${day}`}
+function renderUpcoming(){const now=startOfToday(),all=calendarEntries().filter(x=>x.date>=now);const renderItem=(x,side=false)=>{const dd=daysDiff(x.date),right=dd===0?'Today':dd===1?'1 day':dd+' days',date=x.date.toLocaleDateString('en-AU',{weekday:'short',day:'numeric',month:'short',year:'numeric'})+(x.time?' · '+x.time:''),col=deadlineColor(x.category),kind=x.type==='deadline'?'Deadline':(x.kind||'Event');return side?`<div class="side-event"><span class="u-dot" style="background:${col}"></span><div><div class="side-event-title">${esc(x.title)}</div><div class="side-event-date">${esc(kind)} · ${date}</div></div><div class="side-event-right">${right}</div></div>`:`<div class="upcoming-item"><span class="u-dot" style="background:${col}"></span><div><div class="u-title">${esc(x.title)}</div><div class="u-date">${esc(kind)} · ${date}</div></div><div class="u-right">${right}</div></div>`};$('calendarUpcoming').innerHTML=all.length?all.slice(0,10).map(x=>renderItem(x,false)).join(''):`<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4m8-4v4M4 10h16"/></svg><b>No calendar items yet</b>Confirmed meetings, presentations, and deadlines will appear here.</div>`;$('sideUpcoming').innerHTML=all.length?all.slice(0,4).map(x=>renderItem(x,true)).join(''):`<div class="list-sub" style="padding:10px 0">No upcoming items.</div>`}
+function projectById(id){return (state.projects||[]).find(p=>String(p.id)===String(id))||null}
+function stateEventDate(raw){const d=new Date(raw);return Number.isNaN(d.getTime())?null:d}
+function completionEvent(e){const t=String(e.type||''),s=String(e.summary||'').toLowerCase();return t==='task_completed'||t==='milestone_completed'||(t==='milestone_status_changed'&&s.includes('completed'))}
+function lastActivityMap(){const out={};(state.events||[]).forEach(e=>{const d=stateEventDate(e.at),pid=String(e.project_id||'');if(!d||!pid)return;if(!out[pid]||d>out[pid])out[pid]=d});return out}
+function weeklyReviewData(){const now=new Date(),cut=new Date(now.getTime()-7*86400000),events=(state.events||[]).filter(e=>{const d=stateEventDate(e.at);return d&&d>=cut}),completed=events.filter(completionEvent),ps=state.projects||[],waiting=ps.filter(p=>p.status==='waiting'),blocked=ps.filter(p=>p.status==='blocked'),active=ps.filter(p=>p.status==='active'),activity=lastActivityMap(),stale=[],missing=[];active.forEach(p=>{const last=activity[String(p.id)],age=last?Math.floor((now-last)/86400000):null;if(age===null||age>=7)stale.push({p,age});const activeMs=(p.milestones||[]).filter(m=>m.status==='active');if(!String(p.next_action||'').trim()&&!activeMs.length)missing.push(p)});const entries=calendarEntries(),today=startOfToday(),upcoming=entries.filter(x=>{const d=daysDiff(x.date);return d>=0&&d<=14}),overdue=confirmedDeadlines().filter(x=>daysDiff(x.date)<0);return{events,completed,waiting,blocked,active,stale,missing,upcoming,overdue}}
+function reviewItem(title,sub=''){return `<div class="review-item"><b>${esc(title)}</b>${sub?`<span class="review-muted">${esc(sub)}</span>`:''}</div>`}
+function renderWeeklyReview(){const r=weeklyReviewData();$('reviewEvents7').textContent=r.events.length;$('reviewCompletions').textContent=r.completed.length;$('reviewWaiting').textContent=r.waiting.length+r.blocked.length;$('reviewUpcoming').textContent=r.upcoming.length;const attention=[];if(r.overdue.length)attention.push(reviewItem(`${r.overdue.length} overdue deadline(s)`,'Resolve or reschedule confirmed deadlines.'));if(r.blocked.length)attention.push(reviewItem(`${r.blocked.length} blocked project(s)`,r.blocked.map(p=>p.name).join(' · ')));if(r.stale.length)attention.push(reviewItem(`${r.stale.length} stale active project(s)`,r.stale.slice(0,4).map(x=>x.p.name+(x.age==null?' · no activity timestamp':` · ${x.age}d`)).join(' | ')));if(r.missing.length)attention.push(reviewItem(`${r.missing.length} project(s) missing a next action`,r.missing.map(p=>p.name).join(' · ')));$('reviewAttention').innerHTML=attention.length?attention.join(''):reviewItem('No structural warning detected','Continue the highest-scoring current action.');$('reviewCompleted').innerHTML=r.completed.length?r.completed.slice(0,6).map(e=>reviewItem(e.summary||'Completed',formatUpdated(e.at))).join(''):reviewItem('No completion recorded this week','Progress can still exist in active work; only confirmed completions appear here.');$('reviewSchedule').innerHTML=r.upcoming.length?r.upcoming.slice(0,7).map(x=>reviewItem((x.time?x.time+' ':'')+x.title,`${localISO(x.date)} · ${x.type==='deadline'?'Deadline':x.kind||'Event'}`)).join(''):reviewItem('No confirmed item in the next 14 days');const prompts=[];if(r.overdue.length)prompts.push('Resolve overdue deadlines before adding new commitments.');if(r.stale.length)prompts.push('Decide whether stale active projects should move, wait, or be paused.');if(r.waiting.length)prompts.push('Check whether any waiting item now has new information.');if(!prompts.length)prompts.push('Review the top current action and protect time for it.');$('reviewPrompt').innerHTML=prompts.map(x=>reviewItem(x)).join('')}
+function analyticsData(){const now=Date.now(),ps=state.projects||[],events=state.events||[],e7=events.filter(e=>{const t=new Date(e.at).getTime();return Number.isFinite(t)&&t>=now-7*86400000}).length,e30=events.filter(e=>{const t=new Date(e.at).getTime();return Number.isFinite(t)&&t>=now-30*86400000}),c30=e30.filter(completionEvent).length,active=ps.filter(p=>p.status==='active'),coverage=active.length?Math.round(100*active.filter(p=>String(p.next_action||'').trim()).length/active.length):100,allMs=ps.flatMap(p=>p.milestones||[]),today=startOfToday(),overdue=confirmedDeadlines().filter(x=>x.date<today).length,up14=calendarEntries().filter(x=>{const d=daysDiff(x.date);return d>=0&&d<=14}).length,activity=lastActivityMap(),stale=active.map(p=>{const d=activity[String(p.id)];return{p,age:d?Math.floor((Date.now()-d)/86400000):null}}).filter(x=>x.age===null||x.age>=7).sort((a,b)=>(b.age??9999)-(a.age??9999));return{e7,e30:e30.length,c30,coverage,allMs,overdue,up14,stale}}
+function searchIndex(){const rows=[];const add=(kind,title,sub,view,extra={})=>rows.push({kind,title:String(title||''),sub:String(sub||''),view,...extra});(state.projects||[]).forEach(p=>{add('Project',p.name,p.next_action||'','projects',{status:p.status,area:categoryLabel(p.category),project:p.name});(p.milestones||[]).forEach(m=>add('Task',m.name,p.name+' · '+statusLabel(m.status),'tasks',{status:m.status,area:categoryLabel(p.category),project:p.name}))});(state.notes||[]).forEach(n=>add('Note',n.title||'Note',n.body||n.text||'','notes',{area:n.category||'',project:projectById(n.project_id)?.name||''}));(state.resources||[]).forEach(r=>add('Resource',r.title||r.name||'Resource',r.description||r.location||'','resources',{area:r.type||'',project:projectById(r.project_id)?.name||''}));confirmedDeadlines().forEach(d=>add('Deadline',d.title,localISO(d.date)+(d.time?' · '+d.time:''),'calendar',{area:categoryLabel(d.category)||'',project:projectById(d.project_id)?.name||''}));(state.calendar_events||[]).forEach(e=>add('Calendar',e.title||e.name||'Event',(e.date||'')+(e.time?' · '+e.time:'')+' · '+(e.kind||'event'),'calendar',{area:categoryLabel(e.category)||'',project:projectById(e.project_id)?.name||''}));(state.events||[]).slice(0,100).forEach(e=>add('History',e.summary||e.type||'Event',e.at||'','review',{project:projectById(e.project_id)?.name||''}));return rows}
+function parseSearchQuery(raw){const filters={},terms=[];String(raw||'').trim().split(/\s+/).filter(Boolean).forEach(t=>{const i=t.indexOf(':');if(i>0&&['kind','type','status','area','project'].includes(t.slice(0,i).toLowerCase()))filters[t.slice(0,i).toLowerCase()]=t.slice(i+1).toLowerCase();else terms.push(t.toLowerCase())});return{terms,filters}}
+const paletteCommands=[['>home','Home','home'],['>projects','Projects','projects'],['>tasks','Tasks','tasks'],['>calendar','Calendar','calendar'],['>review','Weekly Review','review'],['>planner','AI Planning','planner'],['>automation','Automation','automation'],['>notes','Notes','notes'],['>resources','Resources','resources'],['>analytics','Analytics','analytics']];
+function renderNotes(){const notes=state.notes||[];$('notesGrid').innerHTML=notes.length?notes.map(n=>{const p=projectById(n.project_id),tags=Array.isArray(n.tags)?n.tags:[],meta=[categoryLabel(n.category)||'Note',p?.name,n.updated_at?`Updated ${formatUpdated(n.updated_at)}`:n.at?formatUpdated(n.at):''].filter(Boolean).join(' · ');return `<div class="card note-card"><div class="note-title">${esc(n.title||'Note')}</div><div class="note-body">${esc(n.body||n.text||'')}</div><div class="note-meta">${esc(meta)}</div>${tags.length?`<div class="knowledge-meta">${tags.map(t=>`<span class="knowledge-chip">${esc(t)}</span>`).join('')}</div>`:''}</div>`}).join(''):`<div class="card empty-state" style="grid-column:1/-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M5 3h14v18H5z"/><path d="M8 8h8M8 12h8"/></svg><b>No Notes yet</b>Ask ChatGPT to save an idea as a note. NextPlan will keep it as information, not a task.</div>`}
+function renderResources(){const rs=state.resources||[];$('resourcesGrid').innerHTML=rs.length?rs.map(r=>{const p=projectById(r.project_id),tags=Array.isArray(r.tags)?r.tags:[],loc=String(r.location||''),safe=/^https?:\/\//i.test(loc),meta=[r.type||'resource',p?.name,r.updated_at?`Updated ${formatUpdated(r.updated_at)}`:r.at?formatUpdated(r.at):''].filter(Boolean).join(' · ');return `<div class="card resource-card"><div class="resource-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 3h8l4 4v14H7z"/><path d="M15 3v5h5"/></svg></div><div><div class="resource-title">${esc(r.title||r.name||'Resource')}</div><div class="resource-sub">${esc(r.description||'')}</div><div class="note-meta" style="margin-top:5px">${esc(meta)}</div><div style="margin-top:5px">${safe?`<a class="resource-link" href="${esc(loc)}" target="_blank" rel="noopener noreferrer">${esc(loc)}</a>`:`<span class="review-muted">${esc(loc)}</span>`}</div>${tags.length?`<div class="knowledge-meta">${tags.map(t=>`<span class="knowledge-chip">${esc(t)}</span>`).join('')}</div>`:''}</div></div>`}).join(''):`<div class="card empty-state" style="grid-column:1/-1"><svg class="empty-resource-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 14.5 8 16a3.5 3.5 0 0 1-5-5l3-3a3.5 3.5 0 0 1 5 0"/><path d="m14.5 9.5 1.5-1.5a3.5 3.5 0 0 1 5 5l-3 3a3.5 3.5 0 0 1-5 0"/><path d="m9 15 6-6"/></svg><b>No resources indexed yet</b>Ask ChatGPT to save a link as a resource. NextPlan stores a safe pointer without copying sensitive file contents.</div>`}
+function renderAnalytics(){const ps=state.projects||[],cats=[...new Set(ps.map(p=>p.category))],a=analyticsData();$('areaProgress').innerHTML=cats.map(c=>{const arr=ps.filter(p=>p.category===c),avg=arr.length?Math.round(arr.reduce((s,p)=>s+projectPct(p),0)/arr.length):0;return `<div class="area-row"><span>${esc(categoryLabel(c))}</span><div class="area-track"><span style="width:${avg}%"></span></div><b>${avg}%</b></div>`}).join('');$('events7').textContent=a.e7;$('events30').textContent=a.e30;$('completion30').textContent=a.c30;$('nextActionCoverage').textContent=a.coverage+'%';$('waitingCountAnalytics').textContent=ps.filter(p=>p.status==='waiting').length;const done=a.allMs.filter(m=>m.status==='completed'||m.status==='done').length;$('milestoneDone').textContent=done;$('milestoneLabel').textContent=`completed of ${a.allMs.length} tracked milestones`;$('overdueCount').textContent=a.overdue;$('upcoming14Count').textContent=a.up14;const knowledge=(state.notes||[]).length+(state.resources||[]).length;$('knowledgeCount').textContent=knowledge;$('knowledgeLabel').textContent=`${(state.notes||[]).length} notes + ${(state.resources||[]).length} resources`;$('analyticsStale').innerHTML=a.stale.length?a.stale.slice(0,6).map(x=>reviewItem(x.p.name,x.age==null?'No activity timestamp':`${x.age} days since recorded activity`)).join(''):reviewItem('No active project is stale for 7+ days');$('analyticsUpdated').textContent='Last updated: '+formatUpdated(state.system?.last_updated)}
+const defaultAutomationRulesUI=[
+{id:'overdue-deadline',name:'Overdue deadlines',enabled:true},
+{id:'preparation-window',name:'Preparation windows',enabled:true,threshold_days:5},
+{id:'stale-active',name:'Stale active projects',enabled:true,threshold_days:7},
+{id:'waiting-followup',name:'Waiting follow-up',enabled:true,threshold_days:7},
+{id:'blocked-project',name:'Blocked projects',enabled:true},
+{id:'missing-next-action',name:'Missing next action',enabled:true},
+{id:'weekly-review',name:'Weekly review prompt',enabled:true,weekday:6}
+];
+function effectiveAutomationRulesUI(){const over=new Map((state.automation_rules||[]).map(r=>[String(r.id),r]));return defaultAutomationRulesUI.map(r=>({...r,...(over.get(r.id)||{})})).concat((state.automation_rules||[]).filter(r=>!defaultAutomationRulesUI.some(x=>x.id===r.id)))}
+function plannerDataUI(){const r=weeklyReviewData(),focus=decisionCandidates()[0]||null,interventions=[];const add=(sev,title,reason)=>interventions.push({sev,title,reason});r.overdue.forEach(x=>add('critical',x.title,'Confirmed deadline is overdue.'));r.upcoming.filter(x=>daysDiff(x.date)<=5).forEach(x=>add(daysDiff(x.date)<=2?'high':'medium',x.title,`Confirmed commitment in ${daysDiff(x.date)} day(s); preparation window is active.`));r.blocked.forEach(p=>add('high',p.name,'Project is blocked; define an unblock condition.'));r.missing.forEach(p=>add('high',p.name,'Active project has no concrete next action.'));r.stale.forEach(x=>add('medium',x.p.name,x.age==null?'No recorded activity timestamp.':`No recorded movement for ${x.age} day(s).`));r.waiting.forEach(p=>{const activity=lastActivityMap()[String(p.id)],age=activity?Math.floor((Date.now()-activity)/86400000):null;if(age===null||age>=7)add('medium',p.name,`Waiting project has no recorded movement for ${age??'7+'} day(s).`)});if(!interventions.length&&focus)add('normal',focus.name,'No structural warning detected; continue the highest-scoring actionable work.');return{r,focus,interventions}}
+function renderPlanner(){const d=plannerDataUI(),f=d.focus;$('plannerFocus').innerHTML=f?`<div class="review-item"><b>${esc(f.name)}</b><span class="review-muted">${esc(f.project.name)} · ${esc(f.why)}</span></div>`:reviewItem('No actionable focus','Waiting / blocked work is intentionally excluded.');$('plannerCapacity').innerHTML=[reviewItem(`${d.r.active.length} active project(s)`),reviewItem(`${d.r.waiting.length} waiting · ${d.r.blocked.length} blocked`),reviewItem(`${d.r.stale.length} stale active project(s)`) ].join('');$('plannerHorizon').innerHTML=d.r.upcoming.length?d.r.upcoming.slice(0,8).map(x=>reviewItem((x.time?x.time+' ':'')+x.title,`${localISO(x.date)} · ${daysDiff(x.date)} day(s)`)).join(''):reviewItem('No confirmed commitment in the next 14 days');$('plannerInterventions').innerHTML=d.interventions.length?d.interventions.slice(0,10).map(x=>`<div class="review-item"><b class="sev-${x.sev}">${esc(x.title)}</b><span class="review-muted">${esc(x.reason)}</span></div>`).join(''):reviewItem('No planning intervention required')}
+function renderAutomation(){const rules=effectiveAutomationRulesUI(),feed=state.automation_feed||[],meta=state.automation_meta||{};$('automationRules').innerHTML=rules.map(r=>`<div class="review-item ${r.enabled===false?'rule-off':''}"><b>${esc(r.name||r.id)} · ${r.enabled===false?'Off':'On'}</b><span class="review-muted">${esc(r.id)}${r.threshold_days?` · ${r.threshold_days}d threshold`:''}</span></div>`).join('');$('automationFindings').innerHTML=feed.length?feed.slice(0,12).map(f=>`<div class="review-item"><b class="sev-${esc(f.severity||'normal')}">${esc(f.title||f.rule_id)}</b><span class="review-muted">${esc(f.reason||'')}</span></div>`).join(''):reviewItem('No persisted finding yet','The daily automation runner will refresh this feed; current planning remains available in AI Planning.');$('automationMeta').innerHTML=reviewItem(meta.last_run_at?'Last automation run':'No persisted run yet',meta.last_run_at?`${formatUpdated(meta.last_run_at)} · ${meta.finding_count||0} finding(s)`:'Daily scheduler is enabled.')}
+
+function renderMiniSidebar(){const now=new Date();$('sideDate').textContent=now.toLocaleDateString('en-AU',{weekday:'short',day:'numeric',month:'short',year:'numeric'});const active=(state.projects||[]).filter(p=>p.status==='active').length,waiting=(state.projects||[]).filter(p=>p.status==='waiting').length;$('softMessage').textContent=active===0&&waiting>0?'Everything important is waiting. You can stop for today.':waiting>0?'Some things are moving even while you wait.':'A little progress every day adds up.';renderCalendar(miniCursor,'miniDays','miniMonth',true);renderUpcoming()}
+function renderAll(){renderGreeting();renderHome();renderProjects();renderTasks();renderCalendar(calendarCursor,'calGrid','calTitle',false);renderWeeklyReview();renderPlanner();renderAutomation();renderNotes();renderResources();renderAnalytics();renderMiniSidebar()}
+function showView(name){currentView=name;document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id==='view-'+name));document.querySelectorAll('.nav-btn[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===name));if(innerWidth<=820)closeSidebar();window.scrollTo({top:0,behavior:'smooth'})}
+function pickNext(alternative=false){const exclude=alternative?lastPickKey:null,t=chooseDecision(exclude),dlg=$('nextDialog'),body=$('nextDialogBody'),alt=$('pickAlternative');if(!t){body.innerHTML=`<div class="empty-state"><b>No active work needs to move right now</b>Waiting and blocked projects are intentionally excluded.</div>`;lastPickKey=null;alt.style.display='none'}else{lastPickKey=t.key;const p=t.project,pc=projectPct(p),deadline=t.deadlineDays==null?'':(t.deadlineDays<=0?' · Due now':` · ${t.deadlineDays}d remaining`);body.innerHTML=`<div class="card" style="padding:16px;box-shadow:none"><div class="pc-top"><div class="pc-icon" style="background:${colorForCategory(p.category)[0]};color:${colorForCategory(p.category)[1]}">${iconForCategory(p.category)}</div><div class="pc-text"><div class="pc-title" style="font-size:16px">${esc(t.name)}</div><div class="pc-sub">${esc(p.name)} · ${priorityLabel(p.priority)}${deadline}</div></div></div><div class="next" style="margin-top:13px"><b>Why this?:</b> ${esc(t.why)}</div><div class="next" style="margin-top:9px"><b>Current action:</b> ${esc(p.next_action||t.name)}</div></div>`;alt.style.display=t.poolCount>1?'inline-flex':'none'}if(!dlg.open)dlg.showModal()}
+function openSettings(){const c=getCfg();$('repoInput').value=c.repo||'changxinjiresearch/LifeOS';$('branchInput').value=c.branch||'main';$('pathInput').value=c.path||'state.json';$('tokenInput').value=c.token||'';$('settingsDialog').showModal()}function apiPath(c){return `https://api.github.com/repos/${c.repo}/contents/${c.path.split('/').map(encodeURIComponent).join('/')}?ref=${encodeURIComponent(c.branch||'main')}`}function decode64(s){const bin=atob(s.replace(/\n/g,'')),bytes=Uint8Array.from(bin,c=>c.charCodeAt(0));return new TextDecoder().decode(bytes)}
+async function sync(){if(busy)return;const c=getCfg();if(!c.token){$('syncPill').className='sync-pill';$('syncText').textContent='Local';return}busy=true;$('syncPill').className='sync-pill syncing';$('syncText').textContent='Syncing';try{const r=await fetch(apiPath(c),{headers:{Accept:'application/vnd.github+json',Authorization:'Bearer '+c.token,'X-GitHub-Api-Version':'2022-11-28'}});if(!r.ok)throw new Error('GitHub '+r.status);const j=await r.json(),x=JSON.parse(decode64(j.content));if(!Array.isArray(x.projects))throw new Error('Invalid state file');state=x;saveCache();renderAll();$('syncPill').className='sync-pill synced';$('syncText').textContent='Synced'}catch(e){console.warn('NextPlan sync failed:',e);$('syncPill').className='sync-pill error';$('syncText').textContent='Offline'}finally{busy=false}}
+function openSearch(){const dlg=$('searchDialog');dlg.showModal();setTimeout(()=>$('searchInput').focus(),20);renderSearch('')}function renderSearch(q){const raw=String(q||'').trim();if(raw.startsWith('>')){const needle=raw.toLowerCase();const cmds=paletteCommands.filter(c=>c[0].startsWith(needle)||c[1].toLowerCase().includes(needle.slice(1)));$('searchResults').innerHTML=cmds.length?`<div class="search-help">Commands</div>`+cmds.map(c=>`<div class="search-result" data-palette-view="${c[2]}"><span class="search-kind search-command">${esc(c[0])}</span><div><b>${esc(c[1])}</b><p>Open ${esc(c[1])}</p></div></div>`).join(''):`<div class="empty-state"><b>No command</b>Try &gt;review, &gt;calendar or &gt;analytics.</div>`;return}const {terms,filters}=parseSearchQuery(raw),rows=searchIndex().filter(r=>{const hay=[r.kind,r.title,r.sub,r.status||'',r.area||'',r.project||''].join(' ').toLowerCase();if(terms.some(t=>!hay.includes(t)))return false;if(filters.kind&&!r.kind.toLowerCase().includes(filters.kind))return false;if(filters.type&&!r.kind.toLowerCase().includes(filters.type))return false;if(filters.status&&String(r.status||'').toLowerCase()!==filters.status)return false;if(filters.area&&!String(r.area||'').toLowerCase().includes(filters.area))return false;if(filters.project&&!String(r.project||'').toLowerCase().includes(filters.project))return false;return true});$('searchResults').innerHTML=(raw?'<div class="search-help">Search projects, tasks, notes, resources, calendar and history · filters: kind:, status:, area:, project:</div>':'<div class="search-help">Type to search everything, or use &gt;review / &gt;calendar / &gt;analytics.</div>')+(rows.length?rows.slice(0,40).map(r=>`<div class="search-result" data-palette-view="${r.view}"><span class="search-kind">${esc(r.kind)}</span><div><b>${esc(r.title)}</b><p>${esc(r.sub)}</p></div></div>`).join(''):`<div class="empty-state"><b>No results</b>Try another keyword or remove a filter.</div>`)}
+function toggleTheme(){const dark=document.documentElement.dataset.theme==='dark';document.documentElement.dataset.theme=dark?'light':'dark';localStorage.setItem(THEME,dark?'light':'dark');renderAll()}function openSidebar(){$('sidebar').classList.add('open');$('scrim').classList.add('show')}function closeSidebar(){$('sidebar').classList.remove('open');$('scrim').classList.remove('show')}
+document.querySelectorAll('.nav-btn[data-view]').forEach(b=>b.addEventListener('click',()=>showView(b.dataset.view)));document.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>showView(b.dataset.go)));document.addEventListener('click',e=>{const target=e.target.closest('[data-go]');if(target&&target.closest('#homeProjects'))showView(target.dataset.go)});document.querySelectorAll('.area-filter').forEach(b=>b.addEventListener('click',()=>{$('projectAreaFilter').value=b.dataset.area;showView('projects');renderProjects()}));$('projectAreaFilter').onchange=renderProjects;$('projectStatusFilter').onchange=renderProjects;$('nextActionBtn').onclick=()=>pickNext(false);$('pickAlternative').onclick=()=>pickNext(true);$('closeNext').onclick=()=>$('nextDialog').close();$('settingsNav').onclick=openSettings;$('cancelSettings').onclick=()=>$('settingsDialog').close();$('themeBtn').onclick=toggleTheme;$('clearTokenBtn').onclick=()=>{const c=getCfg();delete c.token;saveCfg(c);$('tokenInput').value=''};
+$('settingsForm').onsubmit=e=>{if(e.submitter?.value!=='save')return;e.preventDefault();const c={repo:$('repoInput').value.trim(),branch:$('branchInput').value.trim()||'main',path:$('pathInput').value.trim(),token:$('tokenInput').value.trim()};if(!c.repo||!c.path||!c.token)return;saveCfg(c);$('settingsDialog').close();sync()};$('searchBtn').onclick=openSearch;document.querySelectorAll('.mobile-search').forEach(b=>b.onclick=openSearch);$('closeSearch').onclick=()=>$('searchDialog').close();$('searchInput').oninput=e=>renderSearch(e.target.value);$('searchResults').onclick=e=>{const row=e.target.closest('[data-palette-view]');if(!row)return;$('searchDialog').close();showView(row.dataset.paletteView)};document.addEventListener('keydown',e=>{if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){e.preventDefault();openSearch()}if(e.key==='Escape'&&$('searchDialog').open)$('searchDialog').close()});$('calPrev').onclick=()=>{calendarCursor=new Date(calendarCursor.getFullYear(),calendarCursor.getMonth()-1,1);renderCalendar(calendarCursor,'calGrid','calTitle',false)};$('calNext').onclick=()=>{calendarCursor=new Date(calendarCursor.getFullYear(),calendarCursor.getMonth()+1,1);renderCalendar(calendarCursor,'calGrid','calTitle',false)};$('miniPrev').onclick=()=>{miniCursor=new Date(miniCursor.getFullYear(),miniCursor.getMonth()-1,1);renderCalendar(miniCursor,'miniDays','miniMonth',true)};$('miniNext').onclick=()=>{miniCursor=new Date(miniCursor.getFullYear(),miniCursor.getMonth()+1,1);renderCalendar(miniCursor,'miniDays','miniMonth',true)};$('menuBtn').onclick=openSidebar;$('scrim').onclick=closeSidebar;
+const th=localStorage.getItem(THEME)||'light';document.documentElement.dataset.theme=th;renderAll();if(getCfg().token){sync();syncTimer=setInterval(sync,60000)}if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=phase-d-v1',{updateViaCache:'none'}).catch(()=>{}))}
+})();
+</script>
+</body>
+</html>
