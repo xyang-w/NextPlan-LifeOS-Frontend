@@ -238,7 +238,9 @@ def current_task(project):
 
 def next_task(project):
     milestones = project.get('milestones') or []
-    return next((m for m in milestones if task_status(m) == 'planned'), None)
+    active_index = next((index for index, m in enumerate(milestones) if task_status(m) == 'active'), -1)
+    ordered = milestones[active_index + 1:] + milestones[:max(active_index, 0)]
+    return next((m for m in ordered if task_status(m) == 'planned'), None)
 
 def agent_state(state):
     project = find_agent_project(state)
@@ -272,10 +274,9 @@ def advance_project(state, project, payload):
         raise ValueError('no_current_or_next_task')
     task['status'] = 'completed'
     task['completed_at'] = now()
-    for candidate in milestones:
-        if task_status(candidate) == 'planned':
-            candidate['status'] = 'active'
-            break
+    next_item = next_task(project)
+    if next_item:
+        next_item['status'] = 'active'
     refresh_project_status(project)
     state.setdefault('events', []).insert(0, {'type': 'agent_advance', 'summary': f'Advanced {project.get("name")}: {task.get("name")}', 'project_id': project.get('id'), 'task_id': task.get('id'), 'at': now()})
     return {'completed_task': task, 'current_task': current_task(project), 'next_task': next_task(project)}
