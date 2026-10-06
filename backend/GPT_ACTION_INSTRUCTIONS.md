@@ -21,4 +21,4 @@ Import the OpenAPI schema from:
 
 `https://backend-production-7612.up.railway.app/openapi.json`
 
-For the first working version, configure the Action authentication as **None**. Before sharing the GPT publicly, set `NEXTPLAN_AGENT_API_KEY` in Railway and configure the Action as a Bearer API key.
+Configure the Action authentication as a **Bearer API key**. Set the same secret as `NEXTPLAN_AGENT_API_KEY` in Railway and in the GPT Action. The Agent endpoints reject requests when this key is missing or incorrect.

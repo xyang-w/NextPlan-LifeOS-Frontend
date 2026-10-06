@@ -8,6 +8,7 @@
   "servers": [
     { "url": "https://backend-production-7612.up.railway.app" }
   ],
+  "security": [{ "nextplanBearer": [] }],
   "paths": {
     "/api/agent/state": {
       "get": {
@@ -53,6 +54,13 @@
     }
   },
   "components": {
+    "securitySchemes": {
+      "nextplanBearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "API key"
+      }
+    },
     "schemas": {
       "AdvanceRequest": {
         "type": "object",

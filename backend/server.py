@@ -219,9 +219,7 @@ class Handler(BaseHTTPRequestHandler):
 
 def authorized(header):
     expected = os.environ.get('NEXTPLAN_AGENT_API_KEY', '').strip()
-    if not expected:
-        return True
-    return header == f'Bearer {expected}'
+    return bool(expected) and header == f'Bearer {expected}'
 
 def find_agent_project(state, project_id=None):
     projects = state.get('projects', [])
