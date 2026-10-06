@@ -43,14 +43,14 @@ def extract_project_name(text, fallback):
 
 def extract_milestones(text):
     items = []
-    for raw in text.splitlines():
-        line = re.sub(r'\s+', ' ', raw).strip(' \t-•|')
-        line = re.sub(r'^(?:\d+[.)、]|[一二三四五六七八九十]+[、.)])\s*', '', line)
-        if not line or len(line) < 6 or line.lower().startswith(('current project', 'current topic', 'progress:', 'learning content')): continue
-        if line.startswith(('http://', 'https://')) or line in items: continue
-        items.append(line[:180])
-        if len(items) >= 8: break
-    return items
+    pattern = re.compile(r'([✅⏭️🔄⬜]?)\s*Project\s*\d+\s*[—:-]\s*([^\n（(]+)', re.I)
+    for match in pattern.finditer(text):
+        name = re.sub(r'\s+', ' ', match.group(2)).strip(' \t-–—|')
+        if not name or name in [item['name'] for item in items]: continue
+        emoji = match.group(1)
+        status = 'completed' if emoji == '✅' else ('active' if emoji == '🔄' else 'planned')
+        items.append({'name': name[:160], 'status': status})
+    return items[:5]
 
 def category_for(text):
     lowered = text.lower()
@@ -92,14 +92,17 @@ class Handler(BaseHTTPRequestHandler):
                 return self._send(400, {'ok': False, 'error': 'empty_conversation'})
             state = load_state()
             title = extract_title(text, conversation.get('title') or 'ChatGPT conversation')
-            project_name = extract_project_name(text, conversation.get('title') or title)
+            conversation_title = str(conversation.get('title') or '').strip()
+            project_name = (conversation_title if conversation_title and not conversation_title.lower().startswith('chatgpt') else extract_project_name(text, title))
             project_id = 'project-' + re.sub(r'[^a-z0-9]+', '-', project_name.lower()).strip('-')[:60]
-            milestones = extract_milestones(text) or [title]
-            project = {'id': project_id, 'name': project_name, 'category': category_for(text), 'status': 'active', 'priority': 2, 'next_action': milestones[0], 'milestones': [{'id': f'{project_id}-task-{i + 1}', 'name': item, 'status': 'active' if i == 0 else 'planned', 'desc': item} for i, item in enumerate(milestones)], 'source': conversation.get('url', ''), 'updated_at': now()}
+            milestones = extract_milestones(text) or [{'name': title, 'status': 'active'}]
+            project = {'id': project_id, 'name': project_name, 'category': category_for(text), 'status': 'active', 'priority': 2, 'next_action': project_name, 'milestones': [{'id': f'{project_id}-task-{i + 1}', 'name': item['name'], 'status': item['status'], 'desc': f'Review {item["name"]}'} for i, item in enumerate(milestones)], 'source': conversation.get('url', ''), 'updated_at': now()}
             note = {'id': f'chat-{int(datetime.now().timestamp())}', 'title': title,
                     'body': text[:120000], 'category': '其他', 'at': now(),
                     'source': conversation.get('url', ''), 'project_id': project_id, 'tags': ['chatgpt', 'synced']}
             projects = state.setdefault('projects', [])
+            source_url = conversation.get('url', '')
+            projects[:] = [item for item in projects if item.get('source') != source_url or item.get('id') == project_id]
             existing = next((item for item in projects if item.get('id') == project_id), None)
             if existing: existing.update(project); change_type = 'update_project'
             else: projects.insert(0, project); change_type = 'create_project'
