@@ -69,19 +69,19 @@ def extract_learning_details(text, milestones):
         topic_match = re.search(r'(?:Current Topic|当前内容)\s*[:：]\s*([^|\n]+)', block, flags=re.I)
         progress_match = re.search(r'(?:Progress|进度)\s*[:：]\s*([^|\n]+)', block, flags=re.I)
         small = []
-        if topic_match:
-            small.append('Topic: ' + re.sub(r'\s+', ' ', topic_match.group(1)).strip())
-        if progress_match:
-            small.append('Progress: ' + re.sub(r'\s+', ' ', progress_match.group(1)).strip())
 
         review_match = re.search(r'(?:Review Tasks|复习任务).*?(?=\n\s*\S[^\n]{0,80}:|\Z)', block, flags=re.I | re.S)
         review_text = review_match.group(0) if review_match else block
         for line in review_text.splitlines():
-            line = re.sub(r'^\s*[-•]\s*', '', line).strip()
+            raw_line = line.strip()
+            numbered = re.match(r'^\s*(?:[🔄✅⬜⏭️]\s*)?\d+[.)]\s*', raw_line)
+            if not numbered and not re.match(r'^\s*Q\s*:', raw_line, flags=re.I):
+                continue
+            line = re.sub(r'^\s*[-•]\s*', '', raw_line).strip()
             line = re.sub(r'^\s*[🔄✅⬜⏭️]?\s*\d+[.)]\s*', '', line).strip()
             if re.search(r'current project|当前项目|current topic|当前内容|progress|进度|overall project|总体项目|^project\s*\d+\s*[—:-]', line, flags=re.I):
                 continue
-            if 5 <= len(line) <= 140 and line not in small and ('|' in line or line[0].isalpha() or line[0] >= '\u4e00'):
+            if 5 <= len(line) <= 140 and line not in small:
                 small.append(line)
             if len(small) >= 7:
                 break
