@@ -2,7 +2,7 @@ function visibleText(node) {
   return node && node.innerText ? node.innerText.trim() : '';
 }
 
-function collectConversation() {
+function collectFromDom() {
   const selectors = [
     'main [data-message-author-role]',
     'main [data-testid^="conversation-turn"]',
@@ -28,17 +28,41 @@ function collectConversation() {
     const text = visibleText(main).replace(/\n{3,}/g, '\n\n');
     if (text) messages = [{ index: 0, role: 'context', text: text.slice(-120000) }];
   }
+  return messages;
+}
+
+async function collectConversation() {
+  const scrollables = [...document.querySelectorAll('main, main *')]
+    .filter(node => node.scrollHeight > node.clientHeight + 200)
+    .slice(0, 3);
+  const positions = scrollables.map(node => node.scrollTop);
+  const messages = [];
+  const append = items => items.forEach(item => {
+    if (item.text && !messages.some(existing => existing.role === item.role && existing.text === item.text)) {
+      messages.push({...item, index: messages.length});
+    }
+  });
+  append(collectFromDom());
+  if (scrollables.length) {
+    scrollables.forEach(node => { node.scrollTop = 0; });
+    await new Promise(resolve => setTimeout(resolve, 900));
+    append(collectFromDom());
+    scrollables.forEach(node => { node.scrollTop = node.scrollHeight; });
+    await new Promise(resolve => setTimeout(resolve, 900));
+    append(collectFromDom());
+    scrollables.forEach((node, index) => { node.scrollTop = positions[index]; });
+  }
   return {
     title: document.title.replace(/^ChatGPT\s*[-–—]\s*/i, '').trim(),
     url: location.href,
     captured_at: new Date().toISOString(),
-    messages: messages.slice(-80)
+    messages: messages.slice(-200)
   };
 }
 
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   if (message?.type === 'lifeos.collect') {
-    sendResponse({ ok: true, conversation: collectConversation() });
+    collectConversation().then(conversation => sendResponse({ ok: true, conversation }));
   }
   return true;
 });
