@@ -1,0 +1,24 @@
+{
+  "manifest_version": 3,
+  "name": "NextPlan Sync",
+  "version": "0.1.0",
+  "description": "Send the current, user-selected ChatGPT conversation context to NextPlan.",
+  "permissions": ["activeTab", "scripting", "storage"],
+  "host_permissions": [
+    "https://chatgpt.com/*",
+    "https://chat.openai.com/*",
+    "http://localhost/*",
+    "http://127.0.0.1/*"
+  ],
+  "action": {
+    "default_title": "Sync to LifeOS",
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://chatgpt.com/*", "https://chat.openai.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}
