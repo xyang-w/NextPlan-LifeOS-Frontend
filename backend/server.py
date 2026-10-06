@@ -32,6 +32,33 @@ def extract_title(text, fallback):
             return re.sub(r'^.*?Project\s*\d+\s*[—:-]\s*', '', line, flags=re.I) or line
     return fallback
 
+def extract_project_name(text, fallback):
+    patterns = [r'(?:Current Project|当前项目)\s*[:：]\s*([^|\n]+)', r'(?:Project|项目)\s*[:：]\s*([^|\n]+)']
+    for pattern in patterns:
+        match = re.search(pattern, text, flags=re.I)
+        if match:
+            name = match.group(1).strip(' \t:：')
+            if 2 <= len(name) <= 120: return name
+    return fallback
+
+def extract_milestones(text):
+    items = []
+    for raw in text.splitlines():
+        line = re.sub(r'\s+', ' ', raw).strip(' \t-•|')
+        line = re.sub(r'^(?:\d+[.)、]|[一二三四五六七八九十]+[、.)])\s*', '', line)
+        if not line or len(line) < 6 or line.lower().startswith(('current project', 'current topic', 'progress:', 'learning content')): continue
+        if line.startswith(('http://', 'https://')) or line in items: continue
+        items.append(line[:180])
+        if len(items) >= 8: break
+    return items
+
+def category_for(text):
+    lowered = text.lower()
+    if any(word in lowered for word in ('phd', 'research', '科研', '论文')): return '科研'
+    if any(word in lowered for word in ('course', '学习', '课程', 'interview', '面试')): return '课程'
+    if any(word in lowered for word in ('job', '求职', 'career', '招聘')): return '行政'
+    return '其他'
+
 class Handler(BaseHTTPRequestHandler):
     def _send(self, code, payload):
         raw = json.dumps(payload, ensure_ascii=False).encode()
@@ -65,14 +92,22 @@ class Handler(BaseHTTPRequestHandler):
                 return self._send(400, {'ok': False, 'error': 'empty_conversation'})
             state = load_state()
             title = extract_title(text, conversation.get('title') or 'ChatGPT conversation')
+            project_name = extract_project_name(text, conversation.get('title') or title)
+            project_id = 'project-' + re.sub(r'[^a-z0-9]+', '-', project_name.lower()).strip('-')[:60]
+            milestones = extract_milestones(text) or [title]
+            project = {'id': project_id, 'name': project_name, 'category': category_for(text), 'status': 'active', 'priority': 2, 'next_action': milestones[0], 'milestones': [{'id': f'{project_id}-task-{i + 1}', 'name': item, 'status': 'active' if i == 0 else 'planned', 'desc': item} for i, item in enumerate(milestones)], 'source': conversation.get('url', ''), 'updated_at': now()}
             note = {'id': f'chat-{int(datetime.now().timestamp())}', 'title': title,
                     'body': text[:120000], 'category': '其他', 'at': now(),
-                    'source': conversation.get('url', ''), 'tags': ['chatgpt', 'synced']}
+                    'source': conversation.get('url', ''), 'project_id': project_id, 'tags': ['chatgpt', 'synced']}
+            projects = state.setdefault('projects', [])
+            existing = next((item for item in projects if item.get('id') == project_id), None)
+            if existing: existing.update(project); change_type = 'update_project'
+            else: projects.insert(0, project); change_type = 'create_project'
             state.setdefault('notes', []).insert(0, note)
-            state.setdefault('events', []).insert(0, {'type': 'chat_sync', 'summary': f'Synced: {title}', 'at': now()})
+            state.setdefault('events', []).insert(0, {'type': 'chat_sync', 'summary': f'Synced: {title}', 'project_id': project_id, 'at': now()})
             state.setdefault('system', {})['last_updated'] = now()
             save_state(state)
-            return self._send(200, {'ok': True, 'status': 'preview', 'changes': [{'type': 'create_note', 'title': title}], 'state': state})
+            return self._send(200, {'ok': True, 'status': 'preview', 'changes': [{'type': change_type, 'title': project_name}, {'type': 'create_tasks', 'count': len(milestones)}, {'type': 'create_note', 'title': title}], 'state': state})
         except Exception as exc:
             return self._send(400, {'ok': False, 'error': str(exc)})
 
