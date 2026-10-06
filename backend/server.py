@@ -91,8 +91,8 @@ class Handler(BaseHTTPRequestHandler):
             if not text:
                 return self._send(400, {'ok': False, 'error': 'empty_conversation'})
             state = load_state()
-            title = extract_title(text, conversation.get('title') or 'ChatGPT conversation')
             conversation_title = str(conversation.get('title') or '').strip()
+            title = (conversation_title if conversation_title and not conversation_title.lower().startswith('chatgpt') else extract_title(text, 'ChatGPT conversation'))
             project_name = (conversation_title if conversation_title and not conversation_title.lower().startswith('chatgpt') else extract_project_name(text, title))
             project_id = 'project-' + re.sub(r'[^a-z0-9]+', '-', project_name.lower()).strip('-')[:60]
             milestones = extract_milestones(text) or [{'name': title, 'status': 'active'}]

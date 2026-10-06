@@ -1,7 +1,6 @@
 (() => {
   function currentActionInfo(p) {
     const milestones = Array.isArray(p?.milestones) ? p.milestones : [];
-    const active = milestones.filter(m => m.status === 'active');
     const planned = milestones.filter(m => m.status === 'planned');
 
     if (p?.status === 'waiting') {
@@ -22,13 +21,6 @@
       return {
         label: '尚未开始',
         text: p.next_action || planned[0]?.name || '等待开始'
-      };
-    }
-
-    if (active.length) {
-      return {
-        label: '现在要做',
-        text: active.map(m => m.name).join(' · ')
       };
     }
 
