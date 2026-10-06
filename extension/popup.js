@@ -1,5 +1,5 @@
 const $ = id => document.getElementById(id);
-const DEFAULT_ENDPOINT = 'http://localhost:8000/api/chat/sync';
+const DEFAULT_ENDPOINT = 'https://backend-production-7612.up.railway.app/api/chat/sync';
 
 async function currentConversation() {
   const tabs = await chrome.tabs.query({});
