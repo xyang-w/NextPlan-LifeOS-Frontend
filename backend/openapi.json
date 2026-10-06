@@ -1,0 +1,110 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "NextPlan Agent API",
+    "version": "1.0.0",
+    "description": "Agent API for reading and advancing a personal learning and execution plan."
+  },
+  "servers": [
+    { "url": "https://backend-production-7612.up.railway.app" }
+  ],
+  "paths": {
+    "/api/agent/state": {
+      "get": {
+        "operationId": "getAgentState",
+        "summary": "Read current project and task state",
+        "responses": {
+          "200": {
+            "description": "Current project, current task, next task, and review events",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/AgentState" } } }
+          }
+        }
+      }
+    },
+    "/api/agent/advance": {
+      "post": {
+        "operationId": "advanceAgentTask",
+        "summary": "Complete the current task and activate the next planned task",
+        "requestBody": {
+          "required": false,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/AdvanceRequest" } } }
+        },
+        "responses": {
+          "200": { "description": "Updated task state", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/AgentActionResponse" } } } },
+          "400": { "description": "Invalid request" },
+          "401": { "description": "Unauthorized" }
+        }
+      }
+    },
+    "/api/agent/schedule-review": {
+      "post": {
+        "operationId": "scheduleAgentReview",
+        "summary": "Schedule a review reminder for a task",
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ScheduleReviewRequest" } } }
+        },
+        "responses": {
+          "200": { "description": "Created review event", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/AgentActionResponse" } } } },
+          "400": { "description": "Invalid request" },
+          "401": { "description": "Unauthorized" }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AdvanceRequest": {
+        "type": "object",
+        "properties": {
+          "project_id": { "type": "string", "description": "Optional project id. Defaults to the active project." },
+          "task_id": { "type": "string", "description": "Optional task id. Defaults to the current active task." },
+          "note": { "type": "string" }
+        }
+      },
+      "ScheduleReviewRequest": {
+        "type": "object",
+        "required": ["scheduled_for"],
+        "properties": {
+          "project_id": { "type": "string" },
+          "task_id": { "type": "string" },
+          "scheduled_for": { "type": "string", "format": "date-time", "description": "ISO-8601 date/time calculated from the user's requested reminder." },
+          "title": { "type": "string" },
+          "note": { "type": "string" }
+        }
+      },
+      "Task": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "status": { "type": "string", "enum": ["planned", "active", "completed", "waiting", "blocked"] },
+          "details": { "type": "array", "items": { "type": "string" } },
+          "topic": { "type": "string" },
+          "progress": { "type": "string" }
+        }
+      },
+      "AgentState": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "project": { "type": "object", "nullable": true },
+          "current_task": { "$ref": "#/components/schemas/Task" },
+          "next_task": { "$ref": "#/components/schemas/Task" },
+          "tasks": { "type": "array", "items": { "$ref": "#/components/schemas/Task" } },
+          "projects": { "type": "array", "items": { "type": "object" } },
+          "reviews": { "type": "array", "items": { "type": "object" } }
+        }
+      },
+      "AgentActionResponse": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "ok": { "type": "boolean" },
+          "state": { "$ref": "#/components/schemas/AgentState" }
+        }
+      }
+    }
+  }
+}

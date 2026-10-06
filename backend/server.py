@@ -9,6 +9,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 STATE_FILE = ROOT / 'state.json'
+OPENAPI_FILE = ROOT / 'openapi.json'
 
 def now():
     return datetime.now(timezone.utc).isoformat()
@@ -125,7 +126,7 @@ class Handler(BaseHTTPRequestHandler):
         self.send_header('Content-Type', 'application/json; charset=utf-8')
         self.send_header('Content-Length', str(len(raw)))
         self.send_header('Access-Control-Allow-Origin', '*')
-        self.send_header('Access-Control-Allow-Headers', 'Content-Type')
+        self.send_header('Access-Control-Allow-Headers', 'Content-Type, Authorization')
         self.end_headers()
         self.wfile.write(raw)
 
@@ -136,9 +137,20 @@ class Handler(BaseHTTPRequestHandler):
             return self._send(200, {'ok': True, 'service': 'NextPlan local sync', 'time': now()})
         if self.path.rstrip('/') == '/api/state':
             return self._send(200, load_state())
+        if self.path.rstrip('/') in ('/openapi.json', '/api/agent/openapi.json'):
+            try:
+                return self._send(200, json.loads(OPENAPI_FILE.read_text()))
+            except Exception as exc:
+                return self._send(500, {'ok': False, 'error': f'openapi_unavailable: {exc}'})
+        if self.path.rstrip('/') == '/api/agent/state':
+            return self._send(200, agent_state(load_state()))
         self._send(404, {'ok': False, 'error': 'not_found'})
 
     def do_POST(self):
+        if self.path.rstrip('/') in ('/api/agent/advance', '/api/agent/schedule-review'):
+            if not authorized(self.headers.get('Authorization', '')):
+                return self._send(401, {'ok': False, 'error': 'unauthorized'})
+            return self.handle_agent_action(self.path.rstrip('/'))
         if self.path.rstrip('/') != '/api/chat/sync':
             return self._send(404, {'ok': False, 'error': 'not_found'})
         try:
@@ -181,8 +193,102 @@ class Handler(BaseHTTPRequestHandler):
         except Exception as exc:
             return self._send(400, {'ok': False, 'error': str(exc)})
 
+    def handle_agent_action(self, path):
+        try:
+            length = int(self.headers.get('Content-Length', '0'))
+            payload = json.loads(self.rfile.read(length) or '{}')
+            state = load_state()
+            project = find_agent_project(state, payload.get('project_id'))
+            if not project:
+                return self._send(404, {'ok': False, 'error': 'no_active_project'})
+
+            if path == '/api/agent/advance':
+                result = advance_project(state, project, payload)
+            else:
+                result = schedule_review(state, project, payload)
+            state.setdefault('system', {})['last_updated'] = now()
+            save_state(state)
+            return self._send(200, {'ok': True, 'action': path.rsplit('/', 1)[-1], **result, 'state': agent_state(state)})
+        except ValueError as exc:
+            return self._send(400, {'ok': False, 'error': str(exc)})
+        except Exception as exc:
+            return self._send(500, {'ok': False, 'error': str(exc)})
+
     def log_message(self, fmt, *args):
         print(f'[{datetime.now().strftime("%H:%M:%S")}] {fmt % args}')
+
+def authorized(header):
+    expected = os.environ.get('NEXTPLAN_AGENT_API_KEY', '').strip()
+    if not expected:
+        return True
+    return header == f'Bearer {expected}'
+
+def find_agent_project(state, project_id=None):
+    projects = state.get('projects', [])
+    if project_id:
+        return next((p for p in projects if str(p.get('id')) == str(project_id)), None)
+    return next((p for p in projects if p.get('status') == 'active'), projects[0] if projects else None)
+
+def task_status(task):
+    return 'completed' if task.get('status') in ('done', 'completed') else task.get('status', 'planned')
+
+def current_task(project):
+    milestones = project.get('milestones') or []
+    return next((m for m in milestones if task_status(m) == 'active'), None)
+
+def next_task(project):
+    milestones = project.get('milestones') or []
+    return next((m for m in milestones if task_status(m) == 'planned'), None)
+
+def agent_state(state):
+    project = find_agent_project(state)
+    if not project:
+        return {'project': None, 'current_task': None, 'next_task': None, 'projects': [], 'reviews': []}
+    reviews = [event for event in state.get('calendar_events', []) if event.get('kind') == 'review']
+    return {
+        'project': {'id': project.get('id'), 'name': project.get('name'), 'status': project.get('status'), 'next_action': project.get('next_action')},
+        'current_task': current_task(project),
+        'next_task': next_task(project),
+        'tasks': project.get('milestones', []),
+        'projects': [{'id': p.get('id'), 'name': p.get('name'), 'status': p.get('status')} for p in state.get('projects', [])],
+        'reviews': reviews[-20:]
+    }
+
+def refresh_project_status(project):
+    milestones = project.get('milestones') or []
+    project['status'] = aggregate_status(milestones)
+    active = current_task(project)
+    planned = next_task(project)
+    project['next_action'] = project.get('name') if not active and not planned else (active or planned).get('name')
+    project['updated_at'] = now()
+
+def advance_project(state, project, payload):
+    milestones = project.get('milestones') or []
+    target_id = payload.get('task_id')
+    task = next((m for m in milestones if str(m.get('id')) == str(target_id)), None) if target_id else current_task(project)
+    if not task:
+        task = next_task(project)
+    if not task:
+        raise ValueError('no_current_or_next_task')
+    task['status'] = 'completed'
+    task['completed_at'] = now()
+    for candidate in milestones:
+        if task_status(candidate) == 'planned':
+            candidate['status'] = 'active'
+            break
+    refresh_project_status(project)
+    state.setdefault('events', []).insert(0, {'type': 'agent_advance', 'summary': f'Advanced {project.get("name")}: {task.get("name")}', 'project_id': project.get('id'), 'task_id': task.get('id'), 'at': now()})
+    return {'completed_task': task, 'current_task': current_task(project), 'next_task': next_task(project)}
+
+def schedule_review(state, project, payload):
+    scheduled_for = str(payload.get('scheduled_for') or payload.get('when') or '').strip()
+    if not scheduled_for:
+        raise ValueError('scheduled_for is required; use an ISO-8601 date/time')
+    task = next((m for m in project.get('milestones', []) if str(m.get('id')) == str(payload.get('task_id'))), None) or current_task(project) or next_task(project)
+    event = {'id': f'review-{int(datetime.now().timestamp())}', 'title': payload.get('title') or f'Review {task.get("name") if task else project.get("name")}', 'date': scheduled_for[:10], 'time': scheduled_for[11:16] if len(scheduled_for) > 15 else '', 'kind': 'review', 'type': 'review', 'scheduled_for': scheduled_for, 'project_id': project.get('id'), 'task_id': task.get('id') if task else None, 'note': payload.get('note', ''), 'created_at': now()}
+    state.setdefault('calendar_events', []).append(event)
+    state.setdefault('events', []).insert(0, {'type': 'review_scheduled', 'summary': event['title'], 'project_id': project.get('id'), 'task_id': event.get('task_id'), 'at': now()})
+    return {'review': event}
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', os.environ.get('NEXTPLAN_PORT', '8000')))
