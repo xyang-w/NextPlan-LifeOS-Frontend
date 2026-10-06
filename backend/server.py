@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import json
+import hashlib
 import os
 import re
 from datetime import datetime, timezone
@@ -52,6 +53,64 @@ def extract_milestones(text):
         items.append({'name': name[:160], 'status': status})
     return items[:5]
 
+def extract_learning_details(text, milestones):
+    """Attach a concise topic/progress/detail summary to each top-level project."""
+    blocks = []
+    matches = list(re.finditer(r'(?:Current Project|当前项目)\s*[:：]\s*([^|\n]+)', text, flags=re.I))
+    for index, match in enumerate(matches):
+        end = matches[index + 1].start() if index + 1 < len(matches) else len(text)
+        name = re.sub(r'\s+', ' ', match.group(1)).strip()
+        blocks.append((name, text[match.end():end]))
+
+    details = []
+    for item in milestones:
+        target = item['name'].lower()
+        block = next((body for name, body in blocks if target in name.lower() or name.lower() in target), '')
+        topic_match = re.search(r'(?:Current Topic|当前内容)\s*[:：]\s*([^|\n]+)', block, flags=re.I)
+        progress_match = re.search(r'(?:Progress|进度)\s*[:：]\s*([^|\n]+)', block, flags=re.I)
+        small = []
+        if topic_match:
+            small.append('Topic: ' + re.sub(r'\s+', ' ', topic_match.group(1)).strip())
+        if progress_match:
+            small.append('Progress: ' + re.sub(r'\s+', ' ', progress_match.group(1)).strip())
+
+        review_match = re.search(r'(?:Review Tasks|复习任务).*?(?=\n\s*\S[^\n]{0,80}:|\Z)', block, flags=re.I | re.S)
+        review_text = review_match.group(0) if review_match else block
+        for line in review_text.splitlines():
+            line = re.sub(r'^\s*[-•]\s*', '', line).strip()
+            line = re.sub(r'^\s*[🔄✅⬜⏭️]?\s*\d+[.)]\s*', '', line).strip()
+            if re.search(r'current project|当前项目|current topic|当前内容|progress|进度|overall project|总体项目|^project\s*\d+\s*[—:-]', line, flags=re.I):
+                continue
+            if 5 <= len(line) <= 140 and line not in small and ('|' in line or line[0].isalpha() or line[0] >= '\u4e00'):
+                small.append(line)
+            if len(small) >= 7:
+                break
+        item['details'] = small[:7]
+        item['topic'] = re.sub(r'\s+', ' ', topic_match.group(1)).strip() if topic_match else ''
+        item['progress'] = re.sub(r'\s+', ' ', progress_match.group(1)).strip() if progress_match else ''
+        details.append(item)
+    return details
+
+def aggregate_status(items):
+    statuses = [item.get('status') for item in items]
+    if statuses and all(status in ('completed', 'done') for status in statuses):
+        return 'completed'
+    if any(status == 'active' for status in statuses):
+        return 'active'
+    return 'planned'
+
+def compact_note(project_name, milestones):
+    lines = [f'主线项目：{project_name}', '']
+    for index, item in enumerate(milestones, 1):
+        lines.append(f'{index}. {item["name"]} · {item["status"]}')
+        if item.get('topic'):
+            lines.append(f'   学习主题：{item["topic"]}')
+        if item.get('progress'):
+            lines.append(f'   学习进度：{item["progress"]}')
+        for detail in item.get('details', [])[:4]:
+            lines.append(f'   - {detail}')
+    return '\n'.join(lines)[:5000]
+
 def category_for(text):
     lowered = text.lower()
     if any(word in lowered for word in ('phd', 'research', '科研', '论文')): return '科研'
@@ -94,19 +153,27 @@ class Handler(BaseHTTPRequestHandler):
             conversation_title = str(conversation.get('title') or '').strip()
             title = (conversation_title if conversation_title and not conversation_title.lower().startswith('chatgpt') else extract_title(text, 'ChatGPT conversation'))
             project_name = (conversation_title if conversation_title and not conversation_title.lower().startswith('chatgpt') else extract_project_name(text, title))
-            project_id = 'project-' + re.sub(r'[^a-z0-9]+', '-', project_name.lower()).strip('-')[:60]
+            source_url = str(conversation.get('url', '') or '')
+            identity = source_url or project_name
+            project_id = 'project-' + hashlib.sha1(identity.encode('utf-8')).hexdigest()[:12]
             milestones = extract_milestones(text) or [{'name': title, 'status': 'active'}]
-            project = {'id': project_id, 'name': project_name, 'category': category_for(text), 'status': 'active', 'priority': 2, 'next_action': project_name, 'milestones': [{'id': f'{project_id}-task-{i + 1}', 'name': item['name'], 'status': item['status'], 'desc': f'Review {item["name"]}'} for i, item in enumerate(milestones)], 'source': conversation.get('url', ''), 'updated_at': now()}
-            note = {'id': f'chat-{int(datetime.now().timestamp())}', 'title': title,
-                    'body': text[:120000], 'category': '其他', 'at': now(),
-                    'source': conversation.get('url', ''), 'project_id': project_id, 'tags': ['chatgpt', 'synced']}
+            milestones = extract_learning_details(text, milestones)
+            for item in milestones:
+                item['id'] = f'{project_id}-task-{len(item.get("name", ""))}-{milestones.index(item) + 1}'
+                item['desc'] = item.get('topic') or f'学习并复习 {item["name"]}'
+            project = {'id': project_id, 'name': project_name, 'category': category_for(text), 'status': aggregate_status(milestones), 'priority': 2, 'next_action': project_name, 'milestones': milestones, 'source': source_url, 'updated_at': now()}
+            note = {'id': f'chat-{int(datetime.now().timestamp())}', 'title': project_name,
+                    'body': compact_note(project_name, milestones), 'category': '其他', 'at': now(),
+                    'source': source_url, 'project_id': project_id, 'tags': ['chatgpt', 'synced', 'summary']}
             projects = state.setdefault('projects', [])
-            source_url = conversation.get('url', '')
             projects[:] = [item for item in projects if item.get('source') != source_url or item.get('id') == project_id]
             existing = next((item for item in projects if item.get('id') == project_id), None)
             if existing: existing.update(project); change_type = 'update_project'
             else: projects.insert(0, project); change_type = 'create_project'
-            state.setdefault('notes', []).insert(0, note)
+            notes = state.setdefault('notes', [])
+            if source_url:
+                notes[:] = [item for item in notes if item.get('source') != source_url]
+            notes.insert(0, note)
             state.setdefault('events', []).insert(0, {'type': 'chat_sync', 'summary': f'Synced: {title}', 'project_id': project_id, 'at': now()})
             state.setdefault('system', {})['last_updated'] = now()
             save_state(state)
