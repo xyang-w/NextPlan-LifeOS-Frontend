@@ -1,6 +1,23 @@
 const $ = id => document.getElementById(id);
 const DEFAULT_ENDPOINT = 'https://backend-production-7612.up.railway.app/api/chat/sync';
 
+async function fallbackConversation(tab) {
+  const [result] = await chrome.scripting.executeScript({
+    target: { tabId: tab.id },
+    func: () => {
+      const text = (document.querySelector('main')?.innerText || document.body.innerText || '')
+        .trim().replace(/\n{3,}/g, '\n\n').slice(-120000);
+      return {
+        title: document.title.replace(/^ChatGPT\s*[-–—]\s*/i, '').trim(),
+        url: location.href,
+        captured_at: new Date().toISOString(),
+        messages: text ? [{ index: 0, role: 'context', text }] : []
+      };
+    }
+  });
+  return { ok: true, conversation: result.result };
+}
+
 async function currentConversation() {
   const tabs = await chrome.tabs.query({});
   const [tab] = tabs
@@ -9,18 +26,14 @@ async function currentConversation() {
   if (!tab?.id || !/^https:\/\/(chatgpt\.com|chat\.openai\.com)\//.test(tab.url || '')) {
     throw new Error('请先打开 chatgpt.com 的对话页面。');
   }
-  try { return await chrome.tabs.sendMessage(tab.id, { type: 'lifeos.collect' }); }
+  try {
+    const response = await chrome.tabs.sendMessage(tab.id, { type: 'lifeos.collect' });
+    if (response?.conversation?.messages?.some(message => message.text?.trim())) return response;
+    return await fallbackConversation(tab);
+  }
   catch (_error) {
-    try {
-      const [result] = await chrome.scripting.executeScript({ target: { tabId: tab.id }, func: () => ({
-        title: document.title.replace(/^ChatGPT\s*[-–—]\s*/i, '').trim(), url: location.href,
-        captured_at: new Date().toISOString(),
-        messages: [{ index: 0, role: 'context', text: (document.querySelector('main')?.innerText || document.body.innerText || '').trim().slice(-120000) }]
-      }) });
-      return { ok: true, conversation: result.result };
-    } catch (_fallbackError) {
-      throw new Error('插件无法读取当前 ChatGPT 页面，请确认页面已完全加载并刷新后重试。');
-    }
+    try { return await fallbackConversation(tab); }
+    catch (_fallbackError) { throw new Error('插件无法读取当前 ChatGPT 页面，请确认页面已完全加载并刷新后重试。'); }
   }
 }
 
