@@ -272,10 +272,10 @@ def advance_project(state, project, payload):
         task = next_task(project)
     if not task:
         raise ValueError('no_current_or_next_task')
+    next_item = next_task(project)
     task['status'] = 'completed'
     task['completed_at'] = now()
-    next_item = next_task(project)
-    if next_item:
+    if next_item and next_item.get('id') != task.get('id'):
         next_item['status'] = 'active'
     refresh_project_status(project)
     state.setdefault('events', []).insert(0, {'type': 'agent_advance', 'summary': f'Advanced {project.get("name")}: {task.get("name")}', 'project_id': project.get('id'), 'task_id': task.get('id'), 'at': now()})
