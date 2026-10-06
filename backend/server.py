@@ -143,6 +143,8 @@ class Handler(BaseHTTPRequestHandler):
             except Exception as exc:
                 return self._send(500, {'ok': False, 'error': f'openapi_unavailable: {exc}'})
         if self.path.rstrip('/') == '/api/agent/state':
+            if not authorized(self.headers.get('Authorization', '')):
+                return self._send(401, {'ok': False, 'error': 'unauthorized'})
             return self._send(200, agent_state(load_state()))
         self._send(404, {'ok': False, 'error': 'not_found'})
 
